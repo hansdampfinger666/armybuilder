@@ -28,13 +28,12 @@ std::optional<size_t> index(const vector<T>& vec, const T& what)
 template<typename T>
 std::optional<size_t> index(const vector<T>& vec, const T& what,
                             const size_t from, const size_t to)
-// requries from and to to be in bounds
 {
-    for(size_t idx = from; idx < to; idx++)
+    for(size_t index = from; index < to; index++)
     {
-        if(vec[idx] == what)
+        if(vec[index] == what)
         {
-            return idx;
+            return index;
         }
     }
     return {};
@@ -43,9 +42,25 @@ std::optional<size_t> index(const vector<T>& vec, const T& what,
 template<typename T>
 bool exists(const vector<T>& vec, const T& what)
 {
-    for(auto elem : vec)
+    for(const auto& elem : vec)
     {
         if(elem == what)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+template<typename T>
+bool exists(const vector<T>& vec, const T& what,
+            const size_t from, const size_t to)
+{
+    static_assert(to <= vec.size());
+
+    for(size_t index = from; index < to; index++)
+    {
+        if(vec[index] == what)
         {
             return true;
         }
@@ -57,73 +72,63 @@ template<typename T>
 f32 calc_frag(const vector<T>& vec)
 {
     T initial = {};
-    size_t idx_last_non_initial = vec.size();
+    size_t right = vec.size() - 1;
 
-    while(idx_last_non_initial > -1)
+    for(; right > 0;  right--)
     {
-        if(vec[idx_last_non_initial] != initial)
+        if(vec[right] != initial)
         {
             break;
         }
-        idx_last_non_initial--;
     }
-    if(idx_last_non_initial > 0)
-    {
-        uint64 number_initial = 0;
+    uint64 number_initial = 0;
 
-        for(size_t i = 0; i < idx_last_non_initial; i++)
+    for(size_t left = 0; left < right; left++)
+    {
+        if(vec[left] == initial)
         {
-            if(vec[i] == initial)
-            {
-                number_initial++;
-            }
+            number_initial++;
         }
-        return number_initial / idx_last_non_initial;
     }
-    return 1;
+    if((f32)right == 0.f || (f32)number_initial == 0.f)
+    {
+        return 0.f;
+    }
+    return (f32)number_initial / (f32)right;
 }
 
-template<typename T>
-vector<T> defrag(const vector<T>& vec_i)
+template<typename U, typename ...Ts>
+requires std::is_default_constructible<U>::value
+void defrag(vector<U>& vec, Ts... vecs)
 {
-    // TODO: make this variadic and swap all values in all vectors at once
-    // making copying the result into a brand new vector to
-    // have a diff for the other vectors obsolete
+    U initial = {};
+    size_t left = 0;
+    size_t right = vec.size() - 1;
 
-    vector<T> result(vec_i.size());
-    T initial = {};
-    size_t idxa = 0;
-    size_t idxb = vec_i.size() - 1;
-
-    while(idxb > idxa)
+    while(true)
     {
-        if(vec_i[idxa] != initial)
+        while(vec[left] != initial)
         {
-            result[idxa] = vec_i[idxa];
-            idxa++;
-            continue;
+            left++;
         }
-
-        if(vec_i[idxb] == initial)
+        while(vec[right] == initial)
         {
-            idxb--;
-            continue;
+            right--;
         }
-        result[idxa++] = vec_i[idxb--];
+        if(left >= right)
+        {
+            break;
+        }
+        std::swap(vec[left++], vec[right--]);
     }
-    return result;
 }
 
 template<typename T>
 vector<size_t> index_all(const vector<T>& vec)
 {
-    vector<size_t> result;
-    result.reserve(vec.size());
-
-    for(size_t index = 0; index < vec.size(); index++)
-    {
-        result.push_back(index);
-    }
+    vector<size_t> result(vec.size());
+    size_t index = 0;
+    std::ranges::generate(result, [&index]() mutable { return index++; });
     return result;
 }
 
@@ -252,9 +257,9 @@ index_diff map_vector_index_dif(const vector<T>& vec_old,
     return result;
 }
 
-
+template<typename T>
 void sort_vec_with_idx_diff(const vector<size_t>& idx_mapping,
-                            Range auto& vec)
+                            vector<T> vec)
 {
     auto vec_old = vec;
 
@@ -299,11 +304,22 @@ void sort_vecs(Range auto& ref_vec, Range auto&... vecs)
     (sort_vec_with_idx_diff(idx_mapping, vecs), ...);
 }
 
+template<typename U, typename...Ts>
+void erase(const vector<size_t>& idx_mapping,
+           vector<U> vec, Ts... vecs)
+{
+    for(const auto idx : idx_mapping)
+    {
+
+    }
+}
+
 
 template<typename U, typename... Ts>
 requires std::is_default_constructible<U>::value
 void erase_where_initial(vector<U>& ref_vec, Ts&... vecs)
 {
+    auto where_initial = WHERE(ref_vec, return val == U{}; );
 
 }
 

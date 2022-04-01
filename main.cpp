@@ -25,33 +25,6 @@ int main(int argc, char *argv[])
 //                test_data.texts_.get_indexes(TextsViewFilter::None));
 //    print_table(test_data.texts_.txt_);
 
-
-
-
-
-
-
-
-
-
-
-    vector<uint8> vec1{3, 0, 1, 2, 6, 5, 2, 3, 0};
-    vector<uint8> vec2{3, 1, 0, 2, 6, 5, 2, 3, 0};
-    vector<f32> vec3{9843.23f, 1.f, 2325.f, 3.f, 4.f, 4.f, 4.f, 4.f, 4.f};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //    vector<uint8> vec2{3, 0, 1, 2, 6, 5, 2, 3, 0};
 //    vector<f32> vec2{9843.23f, 1.f, 2325.f, 3.f};
 //    sort_vecs(vec1, vec2, vec3);
