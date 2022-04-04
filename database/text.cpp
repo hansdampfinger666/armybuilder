@@ -63,7 +63,7 @@ vector<uint32> Texts::get_ids(const vector<size_t>& indexes)
     return get_values(id_, indexes);
 }
 
-vector<string> Texts::get_txts(const vector<size_t>& indexes)
+vector<string> Texts::get_txts(const vector<size_t> &indexes)
 {
     return get_values(txt_, indexes);
 }

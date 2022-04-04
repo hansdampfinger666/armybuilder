@@ -20,17 +20,29 @@
 
 int main(int argc, char *argv[])
 {
-    TestData test_data;
-//    auto txts = test_data.texts_.get_txts(
-//                test_data.texts_.get_indexes(TextsViewFilter::None));
-//    print_table(test_data.texts_.txt_);
+//    TestData test_data;
+//    print_table plsment(test_data.texts_.txt_);
 
-//    vector<uint8> vec2{3, 0, 1, 2, 6, 5, 2, 3, 0};
-//    vector<f32> vec2{9843.23f, 1.f, 2325.f, 3.f};
-//    sort_vecs(vec1, vec2, vec3);
+    vector<uint8> vec1{3, 0, 1, 2, 6, 5, 2, 3, 0};
+    vector<uint8> vec11{3, 0, 1, 2, 6, 5, 2, 3, 0};
+    vector<string> vec2{"all", "sort", "me", "together", "cunts", "other",
+                        "with", "the", "Please"};
 
-////    std::ranges::sort(vec2);
+    sort_vecs(vec1, vec11, vec2);
+    new print_table(vec1, vec11, vec2);
+
+//    vector<uint8> vec2{0, 0, 1, 2, 2, 3, 3, 5, 6};
+
+//    print_table vec1print(vec1);
+////    sort_vecs(vec1);
+//    print_table vec2print(vec2);
+
 //    auto index_diff = map_vector_index_dif(vec1, vec2);
+//    print_table idx_diff_print(index_diff.old_idx, index_diff.new_idx);
+//    sort_vec_with_idx_diff(index_diff, vec1);
+//    print_table vec1printafter(vec1);
+
+//    print_table diff(index_diff.old_idx, index_diff.new_idx);
 
 //    print_table pr3(vec1, vec2);
 //    print_table diff(index_diff.old_idx, index_diff.new_idx);

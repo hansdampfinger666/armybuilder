@@ -1,12 +1,20 @@
 #pragma once
 
 #include <generic/types.h>
-#include <generic/print.h>
-#include <optional>
 #include <algorithm>
 #include <ranges>
 
-#include <iostream>
+struct index_diff
+{
+    // this index_diff is the result of a calculation of difference
+    // between two vectors v1 and v2
+    // it describes all move operations that have to take place within
+    // v1 to get v2 as a result:
+    // move_operation[n...] --> v1[new_idx[n...]] = v1[old_idx[n...]]
+    // so that at the end: v1 == v2
+
+    vector<size_t> old_idx, new_idx;
+};
 
 template<typename T>
 concept Range = std::ranges::range<T>;
@@ -115,7 +123,7 @@ void defrag(vector<U>& vec, Ts... vecs)
         {
             right--;
         }
-        if(left >= right)
+        if(left > right)
         {
             break;
         }
@@ -206,17 +214,9 @@ vector<size_t> where(const vector<T>& vec, bool(*cond)(const T& val))
     return result;
 }
 
-// TODO: swtich idx_mapping to struct, that only holds the diff
-// between two vectors in the form of two vectors<size_t>
-
-struct index_diff
-{
-    vector<size_t> old_idx, new_idx;
-};
-
 template<typename T>
-index_diff map_vector_index_dif(const vector<T>& vec_old,
-                                const vector<T>& vec_new)
+index_diff get_vector_index_diff(const vector<T>& vec_old,
+                                 const vector<T>& vec_new)
 {
     index_diff result;
 
@@ -226,7 +226,6 @@ index_diff map_vector_index_dif(const vector<T>& vec_old,
         {
             continue;
         }
-
         size_t pos_in_new = 0;
         std::optional<size_t> new_index = {};
 
@@ -258,69 +257,35 @@ index_diff map_vector_index_dif(const vector<T>& vec_old,
 }
 
 template<typename T>
-void sort_vec_with_idx_diff(const vector<size_t>& idx_mapping,
-                            vector<T> vec)
+void sort_vec_with_idx_diff(const index_diff& idx_diff,
+                            vector<T>& vec)
 {
-    auto vec_old = vec;
+    // start to read the idx_diff table: read first move operation:
+    // move val from idx_old to idx_new; rememeber val at the moved
+    // to idx; at the next iteration move remembered value from the
+    // previously moved to idx and so on
 
-    for(size_t old_idx = 0; const auto new_idx : idx_mapping)
+    size_t move_tab_idx = 0;
+    std::optional<size_t> new_move_tab_idx = {};
+    T moved_to_value = vec[idx_diff.old_idx[move_tab_idx]];
+
+    for(size_t n = 0; n < idx_diff.old_idx.size(); n++)
     {
-        vec[new_idx] = vec_old[old_idx++];
+        move_tab_idx = new_move_tab_idx ? new_move_tab_idx.value() : 0;
+        auto tmp = vec[idx_diff.new_idx[move_tab_idx]];
+        vec[idx_diff.new_idx[move_tab_idx]] = moved_to_value;
+        moved_to_value = std::move(tmp);
+        new_move_tab_idx = index(idx_diff.old_idx,
+                                 idx_diff.new_idx[move_tab_idx]);
     }
 }
 
 void sort_vecs(Range auto& ref_vec, Range auto&... vecs)
 {
-    // generate mapping table for sorting result by comparing unsorted
-    // and sorted vector; mapping is old_idx --> new_idx with:
-    // vector_index --> idx_mapping[vector_index]
-
     auto vec_old = ref_vec;
     std::ranges::sort(ref_vec);
-    vector<size_t> idx_mapping;
-    idx_mapping.reserve(ref_vec.size());
-
-    for(const auto& val : vec_old)
-    {
-        size_t pos_in_sorted = 0;
-        std::optional<size_t> new_index = {};
-
-        do
-        {
-            auto new_index_tmp = index(
-                        ref_vec, val, pos_in_sorted, ref_vec.size());
-
-            if(new_index_tmp)
-            {
-                new_index = new_index_tmp;
-            }
-        }
-        while(pos_in_sorted++ < ref_vec.size() &&
-              new_index &&
-              exists(idx_mapping, new_index.value()));
-
-        idx_mapping.push_back(new_index.value());
-    }
-    (sort_vec_with_idx_diff(idx_mapping, vecs), ...);
-}
-
-template<typename U, typename...Ts>
-void erase(const vector<size_t>& idx_mapping,
-           vector<U> vec, Ts... vecs)
-{
-    for(const auto idx : idx_mapping)
-    {
-
-    }
-}
-
-
-template<typename U, typename... Ts>
-requires std::is_default_constructible<U>::value
-void erase_where_initial(vector<U>& ref_vec, Ts&... vecs)
-{
-    auto where_initial = WHERE(ref_vec, return val == U{}; );
-
+    auto idx_diff = get_vector_index_diff(vec_old, ref_vec);
+    (sort_vec_with_idx_diff(idx_diff, vecs), ...);
 }
 
 

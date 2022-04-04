@@ -34,6 +34,7 @@ struct print_table
         print_hor_line();
         (print_table_row(vecs), ...);
         print_hor_line();
+        delete this;
     }
 
     template<typename... Ts>
@@ -50,6 +51,7 @@ struct print_table
         print_hor_line();
         (print_table_row(vecs), ...);
         print_hor_line();
+        delete this;
     }
 
     template<typename... Ts>
@@ -65,6 +67,7 @@ struct print_table
         print_hor_line();
         (print_table_row(vecs), ...);
         print_hor_line();
+        delete this;
     }
 
     template<typename... Ts>
