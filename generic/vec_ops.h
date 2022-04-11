@@ -4,6 +4,13 @@
 #include <algorithm>
 #include <ranges>
 
+/*
+ * Definitions
+*/
+
+#define WHERE(vec, cond) where<decltype(vec)::value_type>( \
+    vec, [](const auto& val){ cond; });
+
 struct index_diff
 {
     // this index_diff is the result of a calculation of difference
@@ -12,12 +19,19 @@ struct index_diff
     // v1 to get v2 as a result:
     // move_operation[n...] --> v1[new_idx[n...]] = v1[old_idx[n...]]
     // so that at the end: v1 == v2
-
     vector<size_t> old_idx, new_idx;
 };
 
 template<typename T>
+struct value_groups
+{
+    vector<T> group_values;
+    vector<size_t> group_index_from, group_index_to;
+};
+
+template<typename T>
 concept Range = std::ranges::range<T>;
+
 
 template<typename T>
 std::optional<size_t> index(const vector<T>& vec, const T& what)
@@ -45,6 +59,22 @@ std::optional<size_t> index(const vector<T>& vec, const T& what,
         }
     }
     return {};
+}
+
+template<typename T>
+vector<size_t> where(const vector<T>& vec, bool(*cond)(const T& val))
+{
+    vector<size_t> result;
+
+    for(size_t i = 0; const auto& val : vec)
+    {
+        if(cond(val))
+        {
+            result.push_back(i);
+        }
+        i++;
+    }
+    return result;
 }
 
 template<typename T>
@@ -127,7 +157,10 @@ void defrag(vector<U>& vec, Ts... vecs)
         {
             break;
         }
-        std::swap(vec[left++], vec[right--]);
+        std::swap(vec[left], vec[right]);
+        (std::swap(vecs[left], vec[right]), ...);
+        left++;
+        right--;
     }
 }
 
@@ -178,7 +211,7 @@ vector<T> get_values(const vector<T>& vec,
 }
 
 template<typename T>
-vector<T*> get_value_ptr(const vector<T>& vec,
+vector<T*> get_value_ptrs(const vector<T>& vec,
                          const vector<size_t>& vec_indexes)
 {
     if(vec_indexes.size() > vec.size())
@@ -195,30 +228,11 @@ vector<T*> get_value_ptr(const vector<T>& vec,
     return value_refs;
 }
 
-#define WHERE(vec, cond) where<decltype(vec)::value_type>( \
-    vec, [](const auto& val){ cond; });
-
-template<typename T>
-vector<size_t> where(const vector<T>& vec, bool(*cond)(const T& val))
-{
-    vector<size_t> result;
-
-    for(size_t i = 0; const auto& val : vec)
-    {
-        if(cond(val))
-        {
-            result.push_back(i);
-        }
-        i++;
-    }
-    return result;
-}
-
 template<typename T>
 index_diff get_vector_index_diff(const vector<T>& vec_old,
                                  const vector<T>& vec_new)
 {
-    index_diff result;
+    index_diff result {&vec_old, &vec_new};
 
     for(size_t pos_in_old = 0; pos_in_old < vec_old.size(); pos_in_old++)
     {
@@ -257,38 +271,134 @@ index_diff get_vector_index_diff(const vector<T>& vec_old,
 }
 
 template<typename T>
-void sort_vec_with_idx_diff(const index_diff& idx_diff,
-                            vector<T>& vec)
+int partition(vector<T>& vec, const int begin_index, const int end_index,
+              Range auto&... vecs)
 {
-    // start to read the idx_diff table: read first move operation:
-    // move val from idx_old to idx_new; rememeber val at the moved
-    // to idx; at the next iteration move remembered value from the
-    // previously moved to idx and so on
+    const auto pivot = &vec[end_index];
+    int swap = begin_index - 1;
 
-    size_t move_tab_idx = 0;
-    std::optional<size_t> new_move_tab_idx = {};
-    T moved_to_value = vec[idx_diff.old_idx[move_tab_idx]];
-
-    for(size_t n = 0; n < idx_diff.old_idx.size(); n++)
+    for(int comp = begin_index; comp <= end_index; comp++)
     {
-        move_tab_idx = new_move_tab_idx ? new_move_tab_idx.value() : 0;
-        auto tmp = vec[idx_diff.new_idx[move_tab_idx]];
-        vec[idx_diff.new_idx[move_tab_idx]] = moved_to_value;
-        moved_to_value = std::move(tmp);
-        new_move_tab_idx = index(idx_diff.old_idx,
-                                 idx_diff.new_idx[move_tab_idx]);
+        if(vec[comp] < *pivot)
+        {
+            swap++;
+            std::swap(vec[swap], vec[comp]);
+            (std::swap(vecs[swap], vecs[comp]), ...);
+        }
+    }
+    std::swap(vec[swap + 1], vec[end_index]);
+    (std::swap(vecs[swap + 1], vecs[end_index]), ...);
+    return swap + 1;
+}
+
+template<typename T>
+void quick_sort_impl(vector<T>& vec, const int64 begin_index, const int64 end_index,
+                     Range auto&... vecs)
+{
+    if(begin_index < end_index)
+    {
+        auto partition_index = partition(vec, begin_index, end_index, vecs...);
+        quick_sort_impl(vec, begin_index, partition_index - 1, vecs...);
+        quick_sort_impl(vec, partition_index + 1, end_index, vecs...);
     }
 }
 
-void sort_vecs(Range auto& ref_vec, Range auto&... vecs)
+template<typename T>
+bool quick_sort(vector<T>& vec, Range auto&... vecs)
 {
-    auto vec_old = ref_vec;
-    std::ranges::sort(ref_vec);
-    auto idx_diff = get_vector_index_diff(vec_old, ref_vec);
-    (sort_vec_with_idx_diff(idx_diff, vecs), ...);
+    if(vec.size() == 1)
+    {
+        return true;
+    }
+    bool sizes_illegal = false;
+
+    auto size_illegal = [&](const auto& vec, const auto& vec_comp){
+        sizes_illegal = vec_comp.size() < vec.size() ? true : false;
+    };
+    (size_illegal(vec, vecs), ...);
+
+    if(sizes_illegal)
+    {
+        return false;
+    }
+    uint64 begin_index = 0;
+    uint64 end_index = vec.size() - 1;
+    quick_sort_impl(vec, begin_index, end_index, vecs...);
+    return true;
+}
+
+template<typename T>
+bool quick_sort(vector<T>& vec, const int64 begin_index, const int64 end_index,
+                Range auto&... vecs)
+{
+    if(vec.size() == 1)
+    {
+        return true;
+    }
+    if(begin_index < 0 || end_index > vec.size() - 1)
+    {
+        return false;
+    }
+    bool sizes_illegal = false;
+
+    auto size_illegal = [&](const auto& vec, const auto& vec_comp){
+        sizes_illegal = vec_comp.size() < vec.size() ? true : false;
+    };
+    (size_illegal(vec, vecs), ...);
+
+    if(sizes_illegal)
+    {
+        return false;
+    }
+    quick_sort_impl(vec, begin_index, end_index, vecs...);
+    return true;
 }
 
 
+template<typename T>
+value_groups<T> get_value_groups(vector<T>& vec)
+{
+    if(vec.size() == 0)
+    {
+        return {};
+    }
+    value_groups<T> value_groups;
+    T* last_val = nullptr;
+
+    for(size_t index = 0; const auto& val : vec)
+    {
+        if(!last_val)
+        {
+            value_groups.group_values.push_back(val);
+            value_groups.group_index_from.push_back(index);
+            last_val = &vec[index];
+            index++;
+            continue;
+        }
+        if(val != *last_val)
+        {
+            value_groups.group_index_to.push_back(index - 1);
+            value_groups.group_values.push_back(val);
+            value_groups.group_index_from.push_back(index);
+            last_val = &vec[index];
+            index++;
+            continue;
+        }
+        last_val = &vec[index];
+        index++;
+    }
+    value_groups.group_index_to.push_back(vec.size() - 1);
+    return value_groups;
+}
 
 
-
+template<typename T>
+bool quick_sort_by_value_groups(vector<T>& vec, value_groups<T>& value_groups,
+                                Range auto&... vecs)
+{
+    for(size_t i = 0; i < value_groups.group_index_from.size(); i++)
+    {
+        (quick_sort_impl(vec, value_groups.group_index_from,
+                         value_groups.group_index_to, vecs), ...);
+    }
+}

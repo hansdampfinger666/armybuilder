@@ -1,8 +1,9 @@
 #pragma once
 
+#include <QStandardItemModel>
+
 #include <generic/types.h>
 #include <generic/qt_conversions.h>
-#include <QStandardItemModel>
 
 
 template<typename... Ts>
