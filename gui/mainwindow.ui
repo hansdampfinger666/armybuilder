@@ -15,17 +15,17 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pb_master_data_maintenance">
+      <property name="text">
+       <string>Master data maintenance</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="pb_shut_down">
       <property name="text">
        <string>Close</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pb_show_texts_table">
-      <property name="text">
-       <string>Show Texts Table</string>
       </property>
      </widget>
     </item>

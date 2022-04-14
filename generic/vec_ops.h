@@ -4,12 +4,11 @@
 #include <algorithm>
 #include <ranges>
 
-/*
- * Definitions
-*/
+template<typename T>
+bool exists(const vector<T>& vec, const T& what);
 
 #define WHERE(vec, cond) where<decltype(vec)::value_type>( \
-    vec, [](const auto& val){ cond; });
+    vec, [&](const auto& val){ cond; });
 
 struct index_diff
 {
@@ -20,6 +19,21 @@ struct index_diff
     // move_operation[n...] --> v1[new_idx[n...]] = v1[old_idx[n...]]
     // so that at the end: v1 == v2
     vector<size_t> old_idx, new_idx;
+};
+
+template<typename T>
+vector<T> subset(const vector<T>& lhs, const vector<T>& rhs)
+{
+    vector<T> result;
+
+    for(const auto& lhs_val : lhs)
+    {
+        if(exists(rhs, lhs_val))
+        {
+            result.push_back(lhs_val);
+        }
+    }
+    return result;
 };
 
 template<typename T>
@@ -61,6 +75,7 @@ std::optional<size_t> index(const vector<T>& vec, const T& what,
     return {};
 }
 
+//TODO this does not really work, some problem with caputuring
 template<typename T>
 vector<size_t> where(const vector<T>& vec, bool(*cond)(const T& val))
 {
@@ -69,6 +84,22 @@ vector<size_t> where(const vector<T>& vec, bool(*cond)(const T& val))
     for(size_t i = 0; const auto& val : vec)
     {
         if(cond(val))
+        {
+            result.push_back(i);
+        }
+        i++;
+    }
+    return result;
+}
+
+template<typename T>
+vector<size_t> where(const vector<T>& vec, const T& comp)
+{
+    vector<size_t> result;
+
+    for(size_t i = 0; const auto& val : vec)
+    {
+        if(val == comp)
         {
             result.push_back(i);
         }
@@ -195,28 +226,28 @@ vector<size_t> index_where_not_initial(const vector<T>& vec)
 template<typename T>
 vector<T> get_values(const vector<T>& vec,
                      const vector<size_t>& vec_indexes)
-{
+{   
     if(vec_indexes.size() > vec.size())
     {
-        return vector<T>{};
+        return {};
     }
-    vector<T> values;
-    values.reserve(vec_indexes.size());
+    vector<T> result;
+    result.reserve(vec_indexes.size());
 
-    for(size_t values_index = 0; const auto index : vec_indexes)
+    for(size_t result_index = 0; const auto index : vec_indexes)
     {
-        values[values_index++] = vec[index];
+        result[result_index++] = vec[index];
     }
-    return values;
+    return result;
 }
 
 template<typename T>
 vector<T*> get_value_ptrs(const vector<T>& vec,
-                         const vector<size_t>& vec_indexes)
+                          const vector<size_t>& vec_indexes)
 {
     if(vec_indexes.size() > vec.size())
     {
-        return vector<T*>{};
+        return {};
     }
     vector<T*> value_refs;
     value_refs.reserve(vec_indexes.size());
@@ -292,14 +323,14 @@ int partition(vector<T>& vec, const int begin_index, const int end_index,
 }
 
 template<typename T>
-void quick_sort_impl(vector<T>& vec, const int64 begin_index, const int64 end_index,
-                     Range auto&... vecs)
+void quick_sort_detail(vector<T>& vec, const int64 begin_index,
+                       const int64 end_index, Range auto&... vecs)
 {
     if(begin_index < end_index)
     {
         auto partition_index = partition(vec, begin_index, end_index, vecs...);
-        quick_sort_impl(vec, begin_index, partition_index - 1, vecs...);
-        quick_sort_impl(vec, partition_index + 1, end_index, vecs...);
+        quick_sort_detail(vec, begin_index, partition_index - 1, vecs...);
+        quick_sort_detail(vec, partition_index + 1, end_index, vecs...);
     }
 }
 
@@ -323,7 +354,7 @@ bool quick_sort(vector<T>& vec, Range auto&... vecs)
     }
     uint64 begin_index = 0;
     uint64 end_index = vec.size() - 1;
-    quick_sort_impl(vec, begin_index, end_index, vecs...);
+    quick_sort_detail(vec, begin_index, end_index, vecs...);
     return true;
 }
 
@@ -341,7 +372,8 @@ bool quick_sort(vector<T>& vec, const int64 begin_index, const int64 end_index,
     }
     bool sizes_illegal = false;
 
-    auto size_illegal = [&](const auto& vec, const auto& vec_comp){
+    auto size_illegal = [&](const auto& vec, const auto& vec_comp)
+    {
         sizes_illegal = vec_comp.size() < vec.size() ? true : false;
     };
     (size_illegal(vec, vecs), ...);

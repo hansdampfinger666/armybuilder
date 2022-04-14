@@ -1,6 +1,6 @@
 #include "text.h"
 
-std::optional<uint32> Texts::add(const string& txt)
+uint32 Texts::add(const string& txt)
 {
     auto idx_opt = index(txt_, txt);
 
@@ -12,18 +12,20 @@ std::optional<uint32> Texts::add(const string& txt)
         defrag_ = calc_frag(id_);
         return curr_id_;
     }
-    return idx_opt;
+    else
+    {
+        return idx_opt.value();
+    }
 }
 
-std::optional<uint32> Texts::add(const uint32 id, const string& txt)
+uint32 Texts::add(const uint32 id, const string& txt)
 {
     auto idx_opt = index(id_, id);
 
     if(idx_opt)
     {
-        auto idx = idx_opt.value();
-        txt_[idx] = txt;
-        return idx;
+        txt_[idx_opt.value()] = txt;
+        return idx_opt.value();
     }
     return add(txt);
 }
@@ -44,7 +46,7 @@ bool Texts::del(const uint32 id, Texts& trashbin)
     return false;
 }
 
-std::optional<Text> Texts::get(const uint32 id)
+std::optional<Texts::Text> Texts::get(const uint32 id)
 {
     auto idx_opt = index(id_, id);
 
@@ -55,7 +57,7 @@ std::optional<Text> Texts::get(const uint32 id)
                      txt_[idx],
                      lng_ };
     }
-    return std::optional<Text>{};
+    return {};
 }
 
 vector<uint32> Texts::get_ids(const vector<size_t>& indexes)

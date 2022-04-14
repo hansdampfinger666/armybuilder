@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TextTable</class>
- <widget class="QWidget" name="TextTable">
+ <class>Army_Table</class>
+ <widget class="QWidget" name="Army_Table">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1015</width>
-    <height>615</height>
+    <width>835</width>
+    <height>607</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,10 +15,10 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QTableView" name="tv_texts"/>
+    <widget class="QTableView" name="tableView"/>
    </item>
    <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="bb_okcanc">
+    <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>

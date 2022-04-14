@@ -2,9 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <gui/text_table.h>
+#include <gui/master_data.h>
 
-#include <database/text.h>
+#include <database/database.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,13 +15,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, Texts* texts = nullptr);
+    MainWindow(QWidget *parent = nullptr,
+               Texts* texts = nullptr,
+               Armies* armies = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    TextTable *text_table_;
+    MasterData *master_data_table_;
 
     Texts* texts_;
+    Armies* armies_;
 };
 #endif // MAINWINDOW_H

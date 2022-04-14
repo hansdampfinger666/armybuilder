@@ -1,25 +1,13 @@
 #pragma once
 
 #include <gui/mainwindow.h>
-
 #include <QApplication>
-#include <iostream>
 
-#include <generic/types.h>
-#include <generic/vec_ops.h>
-#include <generic/serialize.h>
 #include <generic/test_data.h>
-
-#include <ranges>
-
-#include <database/text.h>
-
-#include <generic/print.h>
-
-
 
 int main(int argc, char *argv[])
 {
+
 //    vector<uint8> vec1{3, 0, 1, 2, 6, 5, 2, 3, 0};
 //    vector<uint8> vec11{3, 0, 1, 2, 6, 5, 2, 3, 0};
 //    vector<string> vec2{"three", "zero", "one", "two", "six", "five",
@@ -48,10 +36,10 @@ int main(int argc, char *argv[])
 //    print_table pr3(vec1, vec2);
 //    print_table diff(index_diff.old_idx, index_diff.new_idx);
 
-    TestData test_data;
+    auto test_data = new TestData;
 
     QApplication a(argc, argv);
-    MainWindow w(nullptr, &test_data.texts_);
+    MainWindow w(nullptr, test_data->texts_, test_data->armies_);
     w.show();
     return a.exec();
 }
