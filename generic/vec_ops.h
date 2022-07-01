@@ -22,7 +22,7 @@ struct index_diff
 };
 
 template<typename T>
-vector<T> subset(const vector<T>& lhs, const vector<T>& rhs)
+vector<T> intersect(const vector<T>& lhs, const vector<T>& rhs)
 {
     vector<T> result;
 
@@ -150,7 +150,7 @@ f32 calc_frag(const vector<T>& vec)
             break;
         }
     }
-    uint64 number_initial = 0;
+    u64 number_initial = 0;
 
     for(size_t left = 0; left < right; left++)
     {
@@ -323,8 +323,8 @@ int partition(vector<T>& vec, const int begin_index, const int end_index,
 }
 
 template<typename T>
-void quick_sort_detail(vector<T>& vec, const int64 begin_index,
-                       const int64 end_index, Range auto&... vecs)
+void quick_sort_detail(vector<T>& vec, const i64 begin_index,
+                       const i64 end_index, Range auto&... vecs)
 {
     if(begin_index < end_index)
     {
@@ -352,14 +352,14 @@ bool quick_sort(vector<T>& vec, Range auto&... vecs)
     {
         return false;
     }
-    uint64 begin_index = 0;
-    uint64 end_index = vec.size() - 1;
+    u64 begin_index = 0;
+    u64 end_index = vec.size() - 1;
     quick_sort_detail(vec, begin_index, end_index, vecs...);
     return true;
 }
 
 template<typename T>
-bool quick_sort(vector<T>& vec, const int64 begin_index, const int64 end_index,
+bool quick_sort(vector<T>& vec, const i64 begin_index, const i64 end_index,
                 Range auto&... vecs)
 {
     if(vec.size() == 1)
@@ -433,4 +433,10 @@ bool quick_sort_by_value_groups(vector<T>& vec, value_groups<T>& value_groups,
         (quick_sort_impl(vec, value_groups.group_index_from,
                          value_groups.group_index_to, vecs), ...);
     }
+}
+
+template<typename T>
+bool is_empty(const vector<T>& vec)
+{
+    return vec.empty();
 }

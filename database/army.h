@@ -15,7 +15,7 @@ struct Armies
         "Text"
     };
 
-    enum ArmiesViewFilter : uint32
+    enum ArmiesViewFilter : i32
     {
         None = 0,
         NotInitial = 1
@@ -23,26 +23,26 @@ struct Armies
 
     struct Army
     {
-        uint32 id_;
-        uint32 txt_id_;
+        i32 id_;
+        i32 txt_id_;
     };
 
-    vector<uint32> id_;
-    vector<uint32> txt_id_;
+    vector<i32> id_;
+    vector<i32> txt_id_;
 
-    uint32 curr_id_ = 0;
-    f32 defrag_ = 0.f;
+    i32 curr_id_ = 0;
+    f32 frag_ = 0.f;
 
     Texts* texts_;
 
     explicit Armies(Texts* texts);
-    std::optional<uint32> add(const string& str);
-    std::optional<uint32> add(const uint32 id, const string& txt);
-    bool                  del(const uint32 id, Armies& trashbin);
-    std::optional<Army>   get(const uint32 id);
-    vector<uint32>        get_ids(const vector<size_t>& indexes);
-    vector<string>        get_names(const vector<size_t>& indexes);
-    vector<size_t>        get_indexes(const ArmiesViewFilter filter);
+    std::optional<i32>      add(const string& str);
+    std::optional<i32>      add(const i32 id, const string& txt);
+    bool                    del(const i32 id, Armies& trashbin);
+    std::optional<Army>     get(const i32 id);
+    vector<i32>             get_ids(const vector<size_t>& indexes);
+    vector<string>          get_names(const vector<size_t>& indexes);
+    vector<size_t>          get_indexes(const ArmiesViewFilter filter);
 
-    CEREAL_LD_SV(id_, txt_id_, curr_id_, defrag_);
+    CEREAL_LD_SV(id_, txt_id_, curr_id_, frag_);
 };

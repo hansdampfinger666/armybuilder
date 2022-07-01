@@ -13,9 +13,12 @@ SOURCES += \
     database/army.cpp \
     database/text.cpp \
     database/unit.cpp \
+    database/model.cpp \
     gui/army_table.cpp \
     gui/mainwindow.cpp \
     gui/master_data.cpp \
+    gui/singlearmywin.cpp \
+    gui/db_viewer.cpp \
     main.cpp
 
 HEADERS += \
@@ -23,6 +26,7 @@ HEADERS += \
     database/database.h \
     database/text.h \
     database/unit.h \
+    database/model.h \
     generic/print.h \
     generic/qt_conversions.h \
     generic/qt_table.h \
@@ -32,7 +36,9 @@ HEADERS += \
     generic/vec_ops.h \
     gui/army_table.h \
     gui/mainwindow.h \
-    gui/master_data.h
+    gui/master_data.h \
+    gui/singlearmywin.h \
+    gui/db_viewer.h
 
 FORMS += \
     gui/army_table.ui \

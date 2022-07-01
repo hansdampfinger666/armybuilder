@@ -1,6 +1,6 @@
 #include "text.h"
 
-uint32 Texts::add(const string& txt)
+i32 Texts::add(const string& txt)
 {
     auto idx_opt = index(txt_, txt);
 
@@ -18,7 +18,7 @@ uint32 Texts::add(const string& txt)
     }
 }
 
-uint32 Texts::add(const uint32 id, const string& txt)
+i32 Texts::add(const i32 id, const string& txt)
 {
     auto idx_opt = index(id_, id);
 
@@ -30,7 +30,7 @@ uint32 Texts::add(const uint32 id, const string& txt)
     return add(txt);
 }
 
-bool Texts::del(const uint32 id, Texts& trashbin)
+bool Texts::del(const i32 id, Texts& trashbin)
 {
     auto idx_opt = index(id_, id);
 
@@ -46,7 +46,7 @@ bool Texts::del(const uint32 id, Texts& trashbin)
     return false;
 }
 
-std::optional<Texts::Text> Texts::get(const uint32 id)
+std::optional<Texts::Text> Texts::get(const i32 id)
 {
     auto idx_opt = index(id_, id);
 
@@ -60,7 +60,21 @@ std::optional<Texts::Text> Texts::get(const uint32 id)
     return {};
 }
 
-vector<uint32> Texts::get_ids(const vector<size_t>& indexes)
+std::optional<i32> Texts::get_id(const string& txt)
+{
+    auto idx_db = index(txt_, txt);
+
+    if(idx_db)
+    {
+        return (i32)idx_db.value();
+    }
+    else
+    {
+        return {};
+    }
+}
+
+vector<i32> Texts::get_ids(const vector<size_t>& indexes)
 {
     return get_values(id_, indexes);
 }

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1015</width>
+    <width>885</width>
     <height>615</height>
    </rect>
   </property>
@@ -14,24 +14,34 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QPushButton" name="pb_armies">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="pb_units">
      <property name="text">
-      <string>Armies</string>
+      <string>Units</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="4" column="0" colspan="3">
+    <widget class="QTableView" name="tv_master_data"/>
+   </item>
+   <item row="8" column="2">
     <widget class="QDialogButtonBox" name="bb_okcanc">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QPushButton" name="pb_units">
+   <item row="3" column="0">
+    <widget class="QPushButton" name="pb_models">
      <property name="text">
-      <string>Units</string>
+      <string>Models</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="pb_armies">
+     <property name="text">
+      <string>Armies</string>
      </property>
     </widget>
    </item>
@@ -42,13 +52,17 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QTableView" name="tv_master_data"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="pb_models">
+   <item row="5" column="0">
+    <widget class="QPushButton" name="pb_add">
      <property name="text">
-      <string>Models</string>
+      <string>Add</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QPushButton" name="pb_delete">
+     <property name="text">
+      <string>Delete</string>
      </property>
     </widget>
    </item>
