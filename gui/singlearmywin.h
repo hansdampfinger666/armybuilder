@@ -1,23 +1,23 @@
-#pragma once
+//#pragma once
 
-#include <QDialog>
-#include <database/army.h> 
-#include <generic/types.h>
-#include <QLineEdit>
+//#include <QDialog>
+//#include <database/army.h>
+//#include <generic/types.h>
+//#include <QLineEdit>
 
-namespace Ui {
-class SingleArmyWin;
-}
+//namespace Ui {
+//class SingleArmyWin;
+//}
 
-class SingleArmyWin : public QDialog
-{
-    Q_OBJECT
+//class SingleArmyWin : public QDialog
+//{
+//    Q_OBJECT
 
-public:
-    explicit SingleArmyWin(QWidget *parent = nullptr, Armies* armies = nullptr);
-    ~SingleArmyWin();
+//public:
+//    explicit SingleArmyWin(QWidget *parent = nullptr, Armies* armies = nullptr);
+//    ~SingleArmyWin();
 
-private:
-    Ui::SingleArmyWin *ui;
-	Armies* armies_;
-};
+//private:
+//    Ui::SingleArmyWin *ui;
+//	Armies* armies_;
+//};

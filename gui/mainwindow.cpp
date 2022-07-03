@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent, db* db)
+MainWindow::MainWindow(QWidget *parent, DB* db)
 	: QMainWindow(parent)
 	, ui(new Ui::MainWindow)
 	, db_(db)

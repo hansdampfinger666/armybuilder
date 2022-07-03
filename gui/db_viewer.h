@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QTableView>
 #include <QStandardItemModel>
+#include <QDialogButtonBox>
 
 #include <generic/types.h>
 #include <generic/qt_table.h>
@@ -12,20 +13,20 @@
 
 class DatabaseViewer : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
 public:
-		DatabaseViewer(QWidget* parent, const db* db);
-		~DatabaseViewer();
+  DatabaseViewer(QWidget* parent, const DB* db);
+  ~DatabaseViewer();
 
 private:
-		const db* db_;
+  const DB* db_;
+  QTableView* table_view_ = nullptr;
+  QStandardItemModel* table_model_ = nullptr;
+  QGridLayout* layout_ = nullptr;
+  vector<QPushButton*> buttons_ = {};
+  QDialogButtonBox* okay_canc_buttons_ = nullptr;
+  DBTypes active_view_ {1};
 
-		QTableView* table_view_ = nullptr;
-
-		QStandardItemModel* tab_model_ = nullptr;
-		QGridLayout* layout_ = nullptr;
-		vector<QPushButton*> buttons_ = {}; 
-
-		void switch_tables();
+  void switch_tables(const DBTypes db_type);
 };

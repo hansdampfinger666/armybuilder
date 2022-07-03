@@ -9,7 +9,7 @@ static const string txt_db_path = std::filesystem::current_path() /= "TXT_TEST.d
 
 struct Texts_Test
 {
-    vector<uint32> id;
+    vector<u32> id;
     // 256 bit, 4 x 64 bit L1 cache line per string
     vector<std::array<char, 32>> txt;
 

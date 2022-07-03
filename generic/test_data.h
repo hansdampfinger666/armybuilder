@@ -16,9 +16,9 @@ static const string model_db_path = std::filesystem::current_path() /=
 class TestData
 {
 public: 
-  db* db_;
+  DB* db_;
 
-  TestData(db* db)
+  TestData(DB* db)
     : db_(db)
   {
     create_text_db(*db_->texts_);

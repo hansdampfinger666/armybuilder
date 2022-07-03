@@ -5,34 +5,42 @@
 #include <database/unit.h>
 #include <database/model.h>
 
-
-class db
+enum DBTypes : i32
 {
-public: 
-	  Texts* texts_;
-  Armies* armies_;
-  Units* units_;
-  Models* models_;
+  NONE = 0,
+  TEXTS = 1,
+  ARMIES = 2,
+  UNITS = 3,
+  MODELS = 4
+};
 
-//  enum db_txt {
-//	0 = none;
-//	1 = "Texts";
-//	2 = "Armies";
-//	3 = "Units";
-//	4 = "Models";
-//  }
+class DB
+{
+public:
+  class Texts* texts_;
+  class Armies* armies_;
+  class Units* units_;
+  class Models* models_;
 
-  const vector<string> db_txt{
+  const vector<string> db_txt_{
     "Texts",
     "Armies",
     "Units",
     "Models",
   };
 
-	db() :
-		texts_(new Texts)
-		, armies_(new Armies(texts_))
-		, units_(new Units(texts_))
-		, models_(new Models(texts_))
-	{}
+  DB()
+    : texts_(new class Texts)
+    , armies_(new class Armies(texts_))
+    , units_(new class Units(texts_))
+    , models_(new class Models(texts_))
+  {}
+
+  ~DB()
+  {
+    delete texts_;
+    delete armies_;
+    delete units_;
+    delete models_;
+  }
 };

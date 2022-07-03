@@ -16,13 +16,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-	MainWindow(QWidget *parnet = nullptr,
-			db* db = nullptr);
-    MainWindow(QWidget *parent = nullptr,
-               Texts* texts = nullptr,
-               Armies* armies = nullptr,
-               Units* units = nullptr,
-               Models* models = nullptr);
+	MainWindow(QWidget *parent = nullptr,
+			DB* db = nullptr);
     ~MainWindow();
 
 private:
@@ -30,7 +25,7 @@ private:
     MasterData *master_data_table_;
 	DatabaseViewer* database_viewer_;
 
-	db* db_;
+	DB* db_;
 
     Texts* texts_;
     Armies* armies_;
