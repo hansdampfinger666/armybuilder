@@ -7,6 +7,7 @@ x_internal_*/
 .clang_complete
 *session.vim
 compile_commands.json
+armybuilder
 
 *~
 *.autosave

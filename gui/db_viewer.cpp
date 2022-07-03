@@ -1,6 +1,4 @@
 #include "db_viewer.h"
-#include "generic/qt_table.h"
-#include "qdialogbuttonbox.h"
 
 DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
   : db_(db)
@@ -125,9 +123,12 @@ DatabaseViewer::extract_ids_from_selection(const QTableView* table_view,
   for (i32 i = 0;
        auto model_index : table_view->selectionModel()->selection().indexes()) {
     i32 id = model_index.data().toInt();
-    if (i == 0 || result[i - 1] == id)
+    if (i == 0 || result[i - 1] == id) {
+      i++;
       continue;
+    }
     result.push_back(id);
+    i++;
   }
   return result;
 }
