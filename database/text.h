@@ -2,25 +2,26 @@
 
 #include <optional>
 
+#include <generic/serialize.h>
 #include <generic/types.h>
 #include <generic/vec_ops.h>
-#include <generic/serialize.h>
 
 class Texts
 {
 public:
+  const vector<string> field_names_ { "ID", "Text" };
+  static const i32 id_table_position_ = 0;
+
   enum Lng : i32
   {
     EN = 0,
     DE = 1
   };
 
-  const vector<string> TextFields{ "ID", "Text" };
-
   enum TextsViewFilter : i32
   {
-    None = 0,
-    NotInitial = 1
+    NONE = 0,
+    NOT_INITIAL = 1
   };
 
   struct Text
@@ -35,7 +36,7 @@ public:
 
   Lng lng_ = EN;
   i32 curr_id_ = 0;
-  f32 defrag_ = 0.f;
+  f32 frag_ = 0.f;
 
   i32 add(const string& txt);
   i32 add(const i32 id, const string& txt);
@@ -47,5 +48,5 @@ public:
   vector<string> get_txts(const vector<i32>& ids);
   vector<size_t> get_indexes(const TextsViewFilter filter);
 
-  CEREAL_LD_SV(id_, txt_, lng_, curr_id_, defrag_);
+  CEREAL_LD_SV(id_, txt_, lng_, curr_id_, frag_);
 };

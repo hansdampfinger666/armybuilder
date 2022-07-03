@@ -12,12 +12,10 @@ QMAKE_CXXFLAGS += \
 SOURCES += \
     database/army.cpp \
     database/text.cpp \
+	database/database.cpp \
     database/unit.cpp \
     database/model.cpp \
-    gui/army_table.cpp \
     gui/mainwindow.cpp \
-    gui/master_data.cpp \
-    gui/singlearmywin.cpp \
     gui/db_viewer.cpp \
     main.cpp
 
@@ -34,17 +32,11 @@ HEADERS += \
     generic/test_data.h \
     generic/types.h \
     generic/vec_ops.h \
-    gui/army_table.h \
     gui/mainwindow.h \
-    gui/master_data.h \
-    gui/singlearmywin.h \
     gui/db_viewer.h
 
 FORMS += \
-    gui/army_table.ui \
-    gui/mainwindow.ui \
-    gui/mainwindow.ui \
-    gui/master_data.ui
+    gui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

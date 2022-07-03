@@ -10,7 +10,8 @@
 class Units
 {
 public:
-  const vector<string> UnitFields{ "ID", "Name" };
+  const vector<string> field_names_ { "Army Name", "ID", "Name" };
+  static const i32 id_table_position_ = 1;
 
   enum UnitsViewFilter : i32
   {
@@ -36,9 +37,11 @@ public:
 
   Units(Texts* texts);
   i32 add(const string& name);
-  i32 add(const i32 id, const string& name);
+  i32 add(const string& name, const i32 army_id);
   bool del(const i32 id, Units& trashbin);
   std::optional<Unit> get(const i32 id);
+  i32 append(const Unit& unit);
+  vector<string> get_names(const vector<i32>& id);
 
   CEREAL_LD_SV(army_id_, id_, txt_id_);
 };

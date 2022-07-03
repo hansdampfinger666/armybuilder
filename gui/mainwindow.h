@@ -1,10 +1,9 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once 
 
 #include <QMainWindow>
+
 #include <gui/master_data.h>
 #include <gui/db_viewer.h>
-
 #include <database/database.h>
 
 QT_BEGIN_NAMESPACE
@@ -16,20 +15,15 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-	MainWindow(QWidget *parent = nullptr,
-			DB* db = nullptr);
+	MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    MasterData *master_data_table_;
 	DatabaseViewer* database_viewer_;
-
-	DB* db_;
-
+	Db* db_;
     Texts* texts_;
     Armies* armies_;
     Units* units_;
     Models* models_;
 };
-#endif // MAINWINDOW_H

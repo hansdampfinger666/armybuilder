@@ -4,58 +4,62 @@ Armies::Armies(Texts* texts)
   : texts_(texts)
 {}
 
-std::optional<i32>
+i32
 Armies::add(const string& name)
 {
-  auto idx_txt_db = index(texts_->txt_, name);
+  auto txt_id_db = texts_->add(name);
+  auto entry_index = vec::index(txt_id_, txt_id_db);
 
-  if (idx_txt_db) // text was found in text database
-  {
-    auto txt_id = texts_->id_[idx_txt_db.value()];
+  if (entry_index)
+    return id_[entry_index.value()];
+  else
+    return append({ 0, txt_id_db });
+}
 
-    if (index(txt_id_, txt_id)) {
-      // text exists and army with the same name already exists
-      return {};
-    } else {
-      // text exists, but army with the same name does not exist
-      id_.push_back(++curr_id_);
-      txt_id_.push_back(txt_id);
-      frag_ = calc_frag(id_);
-      return curr_id_;
-    }
-  } else {
-    // text was not found in text databse
-    id_.push_back(++curr_id_);
-    txt_id_.push_back(texts_->add(name));
-    frag_ = calc_frag(id_);
-    return curr_id_;
-  }
+i32
+Armies::append(const Army& army)
+{
+  curr_id_++;
+  id_.push_back(curr_id_);
+  txt_id_.push_back(army.txt_id_);
+  frag_ = vec::calc_frag(id_);
+  return curr_id_;
 }
 
 bool
 Armies::del(const i32 id, Armies& trashbin)
 {
-  auto idx_opt = index(id_, id);
+  auto index = vec::index(id_, id);
+  if (!index)
+    return false;
 
-  if (idx_opt) {
-    auto idx = idx_opt.value();
-    trashbin.id_.emplace_back(id_[idx]);
-    trashbin.txt_id_.emplace_back(txt_id_[idx]);
-    id_[idx] = 0;
-    frag_ = calc_frag(id_);
-    return true;
-  }
-  return false;
+  trashbin.append({ id_[index.value()], txt_id_[index.value()] });
+  id_[index.value()] = 0;
+  frag_ = vec::calc_frag(id_);
+  return true;
 }
 
 std::optional<Armies::Army>
 Armies::get(const i32 id)
 {
-  auto idx_opt = index(id_, id);
+  auto index = vec::index(id_, id);
+  if (!index)
+    return {};
 
-  if (idx_opt) {
-    auto idx = idx_opt.value();
-    return Army{ id_[idx], txt_id_[idx] };
+  return Army{ id_[index.value()], txt_id_[index.value()] };
+}
+
+vector<string>
+Armies::get_names(const vector<i32>& ids)
+{
+  vector<i32> txt_ids(ids.size(), 0);
+
+  for (i32 i = 0; auto id : ids) {
+    auto index = vec::index(id_, id);
+    if (!index)
+      continue;
+    txt_ids[i] = txt_id_[index.value()];
+    i++;
   }
-  return {};
+  return texts_->get_txts(txt_ids);
 }

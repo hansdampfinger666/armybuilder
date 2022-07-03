@@ -1,9 +1,12 @@
 #pragma once
 
-#include <database/text.h>
 #include <database/army.h>
-#include <database/unit.h>
 #include <database/model.h>
+#include <database/text.h>
+#include <database/unit.h>
+#include <generic/serialize.h>
+
+#include <iostream>
 
 enum DBTypes : i32
 {
@@ -14,13 +17,13 @@ enum DBTypes : i32
   MODELS = 4
 };
 
-class DB
+class Db
 {
 public:
-  class Texts* texts_;
-  class Armies* armies_;
-  class Units* units_;
-  class Models* models_;
+  Texts* texts_;
+  Armies* armies_;
+  Units* units_;
+  Models* models_;
 
   const vector<string> db_txt_{
     "Texts",
@@ -29,18 +32,21 @@ public:
     "Models",
   };
 
-  DB()
-    : texts_(new class Texts)
-    , armies_(new class Armies(texts_))
-    , units_(new class Units(texts_))
-    , models_(new class Models(texts_))
-  {}
+  Db();
+  ~Db();
+  void create_test_data();
 
-  ~DB()
-  {
-    delete texts_;
-    delete armies_;
-    delete units_;
-    delete models_;
-  }
+private:
+  void create_text_db(Texts& texts);
+  void create_army_db(Armies& armies);
+  void create_unit_db(Units& units);
+  void create_model_db(Models& models);
 };
+
+static const string text_db_path = std::filesystem::current_path() /= "TEXTS";
+static const string army_db_path = std::filesystem::current_path() /=
+  "ARMY";
+static const string unit_db_path = std::filesystem::current_path() /=
+  "UNITS";
+static const string model_db_path = std::filesystem::current_path() /=
+  "MODELS";

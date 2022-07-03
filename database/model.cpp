@@ -7,59 +7,89 @@ Models::Models(Texts* texts)
 i32
 Models::add(const string& name)
 {
-  auto idx_txt_db = index(texts_->txt_, name);
+  auto txt_id_db = texts_->add(name);
+  auto entry_index = vec::index(txt_id_, txt_id_db);
 
-  if (idx_txt_db) // text was found in text database
-  {
-    auto txt_id = texts_->id_[idx_txt_db.value()];
+  if (entry_index)
+    return id_[entry_index.value()];
+  else
+    return append({ 0, 0, 0, txt_id_db });
+}
 
-    if (index(txt_id_, txt_id)) {
-      return {};
-    } else {
-      // texts exists, but model with the same name does not exist
-      army_id_.push_back(0);
-      unit_id_.push_back(0);
-      id_.push_back(++curr_id_);
-      txt_id_.push_back(txt_id);
-      frag_ = calc_frag(id_);
-      return curr_id_;
-    }
-  } else // text was not found in text databse
-  {
-    army_id_.push_back(0);
-    unit_id_.push_back(0);
-    id_.push_back(++curr_id_);
-    txt_id_.push_back(texts_->add(name));
-    frag_ = calc_frag(id_);
-    return curr_id_;
-  }
+i32
+Models::add(const string& name, const i32 unit_id)
+{
+  auto id = add(name);
+  auto index = vec::index(id_, id);
+
+  if (index)
+    unit_id_[index.value()] = unit_id;
+  return id;
+}
+
+i32
+Models::add(const string& name, const i32 unit_id, const i32 army_id)
+{
+  auto id = add(name, unit_id);
+  auto index = vec::index(id_, id);
+
+  if (index)
+    army_id_[index.value()] = army_id;
+  return id;
+}
+
+i32
+Models::append(const Model& model)
+{
+  curr_id_++;
+  army_id_.push_back(model.army_id_);
+  unit_id_.push_back(model.unit_id_);
+  id_.push_back(curr_id_);
+  txt_id_.push_back(model.txt_id_);
+  frag_ = vec::calc_frag(id_);
+  return curr_id_;
 }
 
 bool
 Models::del(const i32 id, Models& trashbin)
 {
-  auto idx_opt = index(id_, id);
+  auto index = vec::index(id_, id);
+  if (!index)
+    return false;
 
-  if (idx_opt) {
-    auto idx = idx_opt.value();
-    trashbin.army_id_.emplace_back(army_id_[idx]);
-    trashbin.unit_id_.emplace_back(unit_id_[idx]);
-    trashbin.id_.emplace_back(id_[idx]);
-    trashbin.txt_id_.emplace_back(txt_id_[idx]);
-    return true;
-  }
-  return {};
+  trashbin.append({ army_id_[index.value()],
+                    unit_id_[index.value()],
+                    id_[index.value()],
+                    txt_id_[index.value()] });
+  id_[index.value()] = 0;
+  frag_ = vec::calc_frag(id_);
+  return true;
 }
 
 std::optional<Models::Model>
 Models::get(const i32 id)
 {
-  auto idx_opt = index(id_, id);
+  auto index = vec::index(id_, id);
+  if (!index)
+    return {};
 
-  if (idx_opt) {
-    auto idx = idx_opt.value();
-    return Model{ army_id_[idx], unit_id_[idx], id_[idx], txt_id_[idx] };
-  }
-  return {};
+  return Model{ army_id_[index.value()],
+                unit_id_[index.value()],
+                id_[index.value()],
+                txt_id_[index.value()] };
 }
 
+vector<string> 
+Models::get_names(const vector<i32>& ids)
+{
+	vector<i32> txt_ids(ids.size(), 0);
+
+	for (i32 i = 0; auto id : ids) {
+		auto index = vec::index(id_, id);
+		if(!index)
+			continue;
+		txt_ids[i] = txt_id_[index.value()];
+		i++;
+	}
+	return texts_->get_txts(txt_ids);
+}

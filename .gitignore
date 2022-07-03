@@ -2,6 +2,11 @@
 # ----------------------------------------------------------------------------
 **.pro.user
 x_internal_*/
+*.pro.user
+/.cache
+.clang_complete
+*session.vim
+compile_commands.json
 
 *~
 *.autosave
@@ -39,6 +44,7 @@ Thumbs.db
 
 # qtcreator generated files
 *.pro.user*
+*.h.*
 
 # xemacs temporary files
 *.flc
@@ -72,4 +78,3 @@ Thumbs.db
 # --------
 *.dll
 *.exe
-

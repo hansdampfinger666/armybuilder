@@ -3,19 +3,20 @@
 #include <optional>
 
 #include <database/text.h>
+#include <generic/serialize.h>
 #include <generic/types.h>
 #include <generic/vec_ops.h>
-#include <generic/serialize.h>
 
 class Models
 {
 public:
-  const vector<string> ModelFields{
-    "Army ID",
-    "Unit ID",
+  const vector<string> field_names_{
+    "Army",
+    "Unit",
     "ID",
     "Name",
   };
+  static const i32 id_table_position_ = 2;
 
   enum ModelsViewFilter : i32
   {
@@ -43,9 +44,12 @@ public:
 
   Models(Texts* texts);
   i32 add(const string& name);
-  i32 add(const i32 id, const string& name);
+  i32 add(const string& name, const i32 unit_id);
+  i32 add(const string& name, const i32 unit_id, const i32 army_id);
+  i32 append(const Model& model);
   bool del(const i32 id, Models& trashbin);
   std::optional<Model> get(const i32 id);
+  vector<string> get_names(const vector<i32>& ids);
 
   CEREAL_LD_SV(army_id_, unit_id_, id_, txt_id_, curr_id_, frag_);
 };
