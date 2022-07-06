@@ -72,25 +72,22 @@ struct print_table
   template<typename... Ts>
   void prepare_field_name_data(const vector<Ts>&... vecs)
   {
-    if (field_names_.size() < sizeof...(vecs)) {
+    if (field_names_.size() < sizeof...(vecs))
       for (size_t i = field_names_.size(); i < sizeof...(vecs); i++) {
         field_names_.emplace_back("field" + stringify(i));
       }
-    }
-    for (const auto& field_name : field_names_) {
+    for (const auto& field_name : field_names_)
       if (field_name.length() > field_name_width_) {
         field_name_width_ = field_name.length();
       }
-    }
   }
 
   template<typename T>
   void calculate_column_width(const vector<T>& vec)
   {
     // TODO: f32 wants to output 8 characters, even if 0; fix this
-    if (column_widths_.size() < vec.size()) {
+    if (column_widths_.size() < vec.size())
       column_widths_.resize(vec.size(), 3);
-    }
     for (size_t i = 0; const auto& val : vec) {
       auto len = stringify(val).length() > (stringify(i).length() + 2)
                    ? stringify(val).length()
@@ -139,7 +136,6 @@ struct print_table
   void print_line(const string& str)
   {
     std::cout << "|" << str;
-
     for (i32 i = 0; i < table_width_ - str.length() - 2; i++) {
       std::cout << " ";
     }
@@ -151,7 +147,6 @@ struct print_table
   {
     if (current_row_ == -1) {
       std::cout << "|";
-
       for (u64 padding = 1;
            (padding <= field_name_width_ - field_name_header_.length());
            padding++) {
@@ -160,7 +155,6 @@ struct print_table
       std::cout << field_name_header_;
       current_row_++;
     }
-
     std::cout << "|";
 
     for (u64 i = 0; const auto width : column_widths_) {
@@ -186,7 +180,6 @@ struct print_table
     }
     std::cout << field_names_[current_row_];
     current_row_++;
-
     std::cout << "|";
 
     for (u64 i = 0; const auto& val : vec) {
@@ -211,6 +204,9 @@ type_name()
   std::string_view name, prefix, suffix;
 #ifdef __clang__
   name = __PRETTY_FUNCTION__;
+  :wa
+	  :wa
+
   prefix = "auto type_name() [T = ";
   suffix = "]";
 #elif defined(__GNUC__)
@@ -226,3 +222,6 @@ type_name()
   name.remove_suffix(suffix.size());
   return name;
 }
+:wa
+:wa
+
