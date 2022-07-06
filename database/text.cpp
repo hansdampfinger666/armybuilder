@@ -74,8 +74,7 @@ Texts::get_txts(const vector<size_t>& indexes)
 vector<string>
 Texts::get_txts(const vector<i32>& ids)
 {
-  vector<string> txts;
-  txts.resize(ids.size());
+  vector<string> txts(ids.size(), {""});
 
   for (i32 i = 0; auto id : ids) {
     auto idx = vec::index(id_, id);

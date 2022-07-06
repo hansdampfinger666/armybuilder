@@ -4,7 +4,7 @@
 #include <generic/types.h>
 #include <ranges>
 
-namespace vec{
+namespace vec {
 
 template<typename T>
 bool
@@ -405,11 +405,27 @@ quick_sort_by_value_groups(vector<T>& vec,
   }
 }
 
-template<typename T>
-bool
-is_empty(const vector<T>& vec)
+// "Value-Key-Key-Value" search pattern
+// like a table join involving 4 columns of 2 databases
+// database A: 1 search column, 1 key column
+// database B: 1 key column, 1 result column
+// TODO: some kind of type conflict when using key_indexes as [indexes]
+template<typename T1, typename T2, typename T3>
+std::optional<T3>
+vkkv(const T1& search_value,
+     const vector<T1>& search_column_left,
+     const vector<T2>& key_column_left,
+     const vector<T2>& key_column_right,
+     const vector<T3>& result_column_right)
 {
-  return vec.empty();
+  const auto key_index_left = index(search_column_left, search_value);
+  if (!key_index_left)
+    return {};
+  const auto key_index_right =
+    index(key_column_right, key_column_left[key_index_left.value()]);
+  if (!key_index_right)
+    return {};
+  return result_column_right[key_index_right.value()];
 }
 
 }

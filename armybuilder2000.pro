@@ -17,6 +17,7 @@ SOURCES += \
     database/model.cpp \
     gui/mainwindow.cpp \
     gui/db_viewer.cpp \
+	gui/add_dataset.cpp \
     main.cpp
 
 HEADERS += \
@@ -33,7 +34,8 @@ HEADERS += \
     generic/types.h \
     generic/vec_ops.h \
     gui/mainwindow.h \
-    gui/db_viewer.h
+    gui/db_viewer.h \
+	gui/add_dataset.h
 
 FORMS += \
     gui/mainwindow.ui

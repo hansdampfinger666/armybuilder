@@ -63,3 +63,19 @@ Armies::get_names(const vector<i32>& ids)
   }
   return texts_->get_txts(txt_ids);
 }
+
+vector<string>
+Armies::get_names()
+{
+  return texts_->get_txts(txt_id_);
+}
+
+string
+Armies::get_name(const i32 id)
+{
+  auto result = vec::vkkv(id, id_, txt_id_, texts_->id_, texts_->txt_);
+  if (result)
+    return result.value();
+  else
+    return "";
+}

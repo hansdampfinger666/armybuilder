@@ -42,6 +42,8 @@ public:
   vector<i32> get_ids(const vector<size_t>& indexes);
   vector<string> get_names(const vector<i32>& ids);
   vector<size_t> get_indexes(const ArmiesViewFilter filter);
+	vector<string> get_names();
+	string get_name(const i32 id);
 
   CEREAL_LD_SV(id_, txt_id_, curr_id_, frag_);
 };

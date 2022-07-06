@@ -2,8 +2,8 @@
 
 #include <QMainWindow>
 
-#include <gui/master_data.h>
 #include <gui/db_viewer.h>
+#include <gui/add_dataset.h>
 #include <database/database.h>
 
 QT_BEGIN_NAMESPACE
@@ -26,4 +26,7 @@ private:
     Armies* armies_;
     Units* units_;
     Models* models_;
+
+		QPushButton* test_pushbutton_ = nullptr;
+		AddDataset* add_dataset_ = nullptr;
 };
