@@ -63,6 +63,12 @@ Units::get(const i32 id)
                txt_id_[index.value()] };
 }
 
+vector<i32> 
+Units::get_ids_by_army(const i32 army_id)
+{
+	return vec::get_values(id_, vec::indexes(army_id_, army_id));	
+}
+
 vector<string> 
 Units::get_names(const vector<i32>& ids)
 {
@@ -76,4 +82,10 @@ Units::get_names(const vector<i32>& ids)
 		i++;
 	}
 	return texts_->get_txts(txt_ids);
+}
+
+vector<string>
+Units::get_names()
+{
+  return texts_->get_txts(txt_id_);
 }

@@ -13,14 +13,14 @@ exists(const vector<T>& vec, const T& what);
 #define WHERE(vec, cond)                                                       \
   where<decltype(vec)::value_type>(vec, [&](const auto& val) { cond; });
 
-struct index_diff
-{
   // this index_diff is the result of a calculation of difference
   // between two vectors v1 and v2
   // it describes all move operations that have to take place within
   // v1 to get v2 as a result:
   // move_operation[n...] --> v1[new_idx[n...]] = v1[old_idx[n...]]
   // so that at the end: v1 == v2
+struct index_diff
+{
   vector<size_t> old_idx, new_idx;
 };
 
@@ -71,6 +71,19 @@ index(const vector<T>& vec, const T& what, const size_t from, const size_t to)
     }
   }
   return {};
+}
+
+template<typename T>
+vector<size_t>
+indexes(const vector<T>& vec, const T& what)
+{
+  vector<size_t> result;
+  for (size_t i = 0; const auto& entry : vec) {
+    if (entry == what)
+      result.push_back(i);
+    i++;
+  }
+  return result;
 }
 
 // TODO this does not really work, some problem with caputuring
@@ -409,7 +422,7 @@ quick_sort_by_value_groups(vector<T>& vec,
 // like a table join involving 4 columns of 2 databases
 // database A: 1 search column, 1 key column
 // database B: 1 key column, 1 result column
-// TODO: some kind of type conflict when using key_indexes as [indexes]
+// 1:1 variant
 template<typename T1, typename T2, typename T3>
 std::optional<T3>
 vkkv(const T1& search_value,
@@ -426,6 +439,32 @@ vkkv(const T1& search_value,
   if (!key_index_right)
     return {};
   return result_column_right[key_index_right.value()];
+}
+
+// "Value-Keys-Keys-Values search pattern
+// 1:n variant of vkkv
+template<typename T1, typename T2, typename T3>
+vector<T3>
+vksksv(const T1& search_value,
+       const vector<T1>& search_column_left,
+       const vector<T2>& key_column_left,
+       const vector<T2>& key_column_right,
+       const vector<T3>& result_column_right)
+{
+  const auto key_indexes_left = indexes(search_column_left, search_value);
+  if (key_indexes_left.empty())
+    return {};
+  vector<T2> keys_left;
+  for (const auto key_index_left : key_indexes_left)
+    keys_left.push_back(key_column_left[key_index_left]);
+  vector<T2> key_indexes_right;
+  for (const auto key_left : keys_left)
+    key_indexes_right.push_back(indexes(key_column_right, key_left));
+  if (key_indexes_right.empty())
+    return {};
+  vector<T3> result;
+  for (const auto key_index_right : key_indexes_right)
+    result.push_back(result_column_right[key_index_right]);
 }
 
 }

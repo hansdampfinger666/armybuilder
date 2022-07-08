@@ -3,14 +3,14 @@
 #include <optional>
 
 #include <database/text.h>
+#include <generic/serialize.h>
 #include <generic/types.h>
 #include <generic/vec_ops.h>
-#include <generic/serialize.h>
 
 class Units
 {
 public:
-  const vector<string> field_names_ { "Army Name", "ID", "Name" };
+  const vector<string> field_names_{ "Army Name", "ID", "Name" };
   static const i32 id_table_position_ = 1;
 
   enum UnitsViewFilter : i32
@@ -40,8 +40,10 @@ public:
   i32 add(const string& name, const i32 army_id);
   bool del(const i32 id, Units& trashbin);
   std::optional<Unit> get(const i32 id);
+  vector<i32> get_ids_by_army(const i32 army_id);
   i32 append(const Unit& unit);
   vector<string> get_names(const vector<i32>& id);
+  vector<string> get_names();
 
   CEREAL_LD_SV(army_id_, id_, txt_id_);
 };

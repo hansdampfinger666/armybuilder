@@ -79,3 +79,9 @@ Armies::get_name(const i32 id)
   else
     return "";
 }
+
+std::optional<i32> 
+Armies::get_id(const string& name)
+{
+	return vec::vkkv(name, texts_->txt_, texts_->id_, txt_id_, id_);
+}

@@ -22,17 +22,20 @@ class AddDataset : public QWidget
   Q_OBJECT
 
 public:
+  QWidget* parent = nullptr;
   AddDataset(QWidget* parent, const Db* db, const DBTypes active_view);
   ~AddDataset();
+
+  void switch_view(const DBTypes new_view);
+  
+public slots: 
+  void army_drop_down_changed(const QString& txt);
 
 private:
   const Db* db_ = nullptr;
   DBTypes active_view_{ 0 };
   QGridLayout* layout_ = nullptr;
-  QDialogButtonBox* okay_canc_buttons_ = nullptr;
-
-  vector<QLabel*> labels_;
   QComboBox* army_drop_down_ = nullptr;
-
-  void switch_view(const DBTypes new_view);
+  QComboBox* unit_drop_down_ = nullptr;
+  string army_drop_down_val_;
 };
