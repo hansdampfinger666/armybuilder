@@ -1,5 +1,4 @@
 #include "abstract_database.h"
-#include "text.h"
 
 u64
 AbstractDatabase::add(const string& name)

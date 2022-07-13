@@ -3,7 +3,6 @@
 #include <generic/serialize.h>
 #include <generic/types.h>
 #include <generic/vec_ops.h>
-//#include <database/text.h>
 //#include <boost/te.hpp>
 
 class Texts;
