@@ -39,7 +39,7 @@ AddDataset::switch_view(const DBTypes new_view)
           new QLabel(QString::fromStdString(label_txt), this), column, 0);
         column++;
       }
-      army_drop_down_= new QComboBox(this);
+      army_drop_down_ = new QComboBox(this);
       for (const auto& army_name : db_->armies_->get_names()) {
         army_drop_down_->addItem(QString::fromStdString(army_name));
       }
@@ -67,6 +67,10 @@ AddDataset::switch_view(const DBTypes new_view)
       }
       layout_->addWidget(army_drop_down_, 0, 1);
       layout_->addWidget(unit_drop_down_, 1, 1);
+      QObject::connect(army_drop_down_,
+                       &QComboBox::currentTextChanged,
+                       this,
+                       &AddDataset::army_drop_down_changed);
       row = db_->models_->field_names_.size();
       break;
     }
@@ -83,23 +87,30 @@ AddDataset::switch_view(const DBTypes new_view)
 void
 AddDataset::army_drop_down_changed(const QString& txt)
 {
+  std::cout << "army drop down value changed\n";
   auto str = txt.toStdString();
   if (army_drop_down_val_ == str)
     return;
   army_drop_down_val_ = str;
+  std::cout << "army drop down changed to str: " << str << "\n";
   auto army_txt_id = db_->texts_->get_id(str);
+
   std::optional<i32> army_id;
   if (army_txt_id)
     army_id = db_->armies_->get_id(str);
-  else return;
+  else
+    return;
+  // if there is a unit drop down around, clear and rebuild that
+  if (!unit_drop_down_)
+    return;
   unit_drop_down_->clear();
-  auto unit_txts = db_->units_->get_names(db_->units_->get_ids_by_army(army_id.value()));
-  for(const auto& unit_txt : db_->units_->get_names(db_->units_->get_ids_by_army(army_id.value()))) {
-	 unit_drop_down_->addItem(QString::fromStdString(unit_txt)); 
+  auto unit_ids = db_->units_->get_ids_by_army(army_id.value());
+  auto unit_txts =
+    db_->units_->get_names(db_->units_->get_ids_by_army(army_id.value()));
+  for (const auto& unit_txt :
+       db_->units_->get_names(db_->units_->get_ids_by_army(army_id.value()))) {
+    unit_drop_down_->addItem(QString::fromStdString(unit_txt));
   }
 }
 
-AddDataset::~AddDataset()
-{
-  std::cout << "destructor of adddataset was called\n";
-}
+AddDataset::~AddDataset() {}

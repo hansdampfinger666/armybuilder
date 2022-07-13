@@ -5,9 +5,9 @@
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 #include <filesystem>
-#include <iostream>
 #include <fstream>
 #include <generic/types.h>
+#include <iostream>
 
 #define CEREAL_LD_SV(...)                                                      \
   template<class Archive>                                                      \

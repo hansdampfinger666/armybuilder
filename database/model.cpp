@@ -1,10 +1,6 @@
 #include "model.h"
 
-Models::Models(Texts* texts)
-  : texts_(texts)
-{}
-
-i32
+u64
 Models::add(const string& name)
 {
   auto txt_id_db = texts_->add(name);
@@ -12,12 +8,15 @@ Models::add(const string& name)
 
   if (entry_index)
     return id_[entry_index.value()];
-  else
-    return append({ 0, 0, 0, txt_id_db });
+  else {
+    Model new_model;
+    new_model.txt_id_ = txt_id_db;
+    return append(new_model);
+  }
 }
 
-i32
-Models::add(const string& name, const i32 unit_id)
+u64
+Models::add(const string& name, const u64 unit_id)
 {
   auto id = add(name);
   auto index = vec::index(id_, id);
@@ -27,8 +26,8 @@ Models::add(const string& name, const i32 unit_id)
   return id;
 }
 
-i32
-Models::add(const string& name, const i32 unit_id, const i32 army_id)
+u64
+Models::add(const string& name, const u64 unit_id, const u64 army_id)
 {
   auto id = add(name, unit_id);
   auto index = vec::index(id_, id);
@@ -38,7 +37,7 @@ Models::add(const string& name, const i32 unit_id, const i32 army_id)
   return id;
 }
 
-i32
+u64
 Models::append(const Model& model)
 {
   curr_id_++;
@@ -51,45 +50,26 @@ Models::append(const Model& model)
 }
 
 bool
-Models::del(const i32 id, Models& trashbin)
+Models::del(const u64 id, Models& trashbin)
 {
   auto index = vec::index(id_, id);
   if (!index)
     return false;
 
-  trashbin.append({ army_id_[index.value()],
-                    unit_id_[index.value()],
-                    id_[index.value()],
-                    txt_id_[index.value()] });
+  auto trashed_model = get(index.value());
+  trashbin.append(trashed_model.value());
   id_[index.value()] = 0;
   frag_ = vec::calc_frag(id_);
   return true;
 }
 
 std::optional<Models::Model>
-Models::get(const i32 id)
+Models::get(const u64 id)
 {
   auto index = vec::index(id_, id);
   if (!index)
     return {};
 
-  return Model{ army_id_[index.value()],
-                unit_id_[index.value()],
-                id_[index.value()],
-                txt_id_[index.value()] };
-}
-
-vector<string> 
-Models::get_names(const vector<i32>& ids)
-{
-	vector<i32> txt_ids(ids.size(), 0);
-
-	for (i32 i = 0; auto id : ids) {
-		auto index = vec::index(id_, id);
-		if(!index)
-			continue;
-		txt_ids[i] = txt_id_[index.value()];
-		i++;
-	}
-	return texts_->get_txts(txt_ids);
+  auto fetched_model = get(index.value());
+  return fetched_model.value();
 }

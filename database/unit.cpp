@@ -1,10 +1,6 @@
 #include "unit.h"
 
-Units::Units(Texts* texts)
-  : texts_(texts)
-{}
-
-i32
+u64
 Units::add(const string& name)
 {
   auto txt_id_db = texts_->add(name);
@@ -12,12 +8,15 @@ Units::add(const string& name)
 
   if (entry_index)
     return id_[entry_index.value()];
-  else
-    return append({ 0, 0, txt_id_db });
+  else {
+    Unit new_unit;
+    new_unit.txt_id_ = txt_id_db;
+    return append(new_unit);
+  }
 }
 
-i32
-Units::add(const string& name, const i32 army_id)
+u64
+Units::add(const string& name, const u64 army_id)
 {
   auto id = add(name);
   auto index = vec::index(id_, id);
@@ -27,7 +26,7 @@ Units::add(const string& name, const i32 army_id)
   return id;
 }
 
-i32
+u64
 Units::append(const Unit& unit)
 {
   curr_id_++;
@@ -39,53 +38,32 @@ Units::append(const Unit& unit)
 }
 
 bool
-Units::del(const i32 id, Units& trashbin)
+Units::del(const u64 id, Units& trashbin)
 {
   auto index = vec::index(id_, id);
   if (!index)
     return false;
 
-  trashbin.append({ id_[index.value()], txt_id_[index.value()] });
+  auto trashed_unit = get(index.value());
+  trashbin.append(trashed_unit.value());
   id_[index.value()] = 0;
   frag_ = vec::calc_frag(id_);
   return true;
 }
 
 std::optional<Units::Unit>
-Units::get(const i32 id)
+Units::get(const u64 id)
 {
   auto index = vec::index(id_, id);
   if (!index)
     return {};
 
-  return Unit{ army_id_[index.value()],
-               id_[index.value()],
-               txt_id_[index.value()] };
+  auto fetched_unit = get(index.value());
+  return fetched_unit.value();
 }
 
-vector<i32> 
-Units::get_ids_by_army(const i32 army_id)
+vector<u64>
+Units::get_ids_by_army(const u64 army_id)
 {
-	return vec::get_values(id_, vec::indexes(army_id_, army_id));	
-}
-
-vector<string> 
-Units::get_names(const vector<i32>& ids)
-{
-	vector<i32> txt_ids(ids.size(), 0);
-
-	for (i32 i = 0; auto id : ids) {
-		auto index = vec::index(id_, id);
-		if(!index)
-			continue;
-		txt_ids[i] = txt_id_[index.value()];
-		i++;
-	}
-	return texts_->get_txts(txt_ids);
-}
-
-vector<string>
-Units::get_names()
-{
-  return texts_->get_txts(txt_id_);
+  return vec::get_values(id_, vec::indexes(army_id_, army_id));
 }

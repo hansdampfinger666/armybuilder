@@ -204,9 +204,6 @@ type_name()
   std::string_view name, prefix, suffix;
 #ifdef __clang__
   name = __PRETTY_FUNCTION__;
-  :wa
-	  :wa
-
   prefix = "auto type_name() [T = ";
   suffix = "]";
 #elif defined(__GNUC__)
@@ -222,6 +219,3 @@ type_name()
   name.remove_suffix(suffix.size());
   return name;
 }
-:wa
-:wa
-

@@ -11,10 +11,10 @@ QMAKE_CXXFLAGS += \
 
 SOURCES += \
     database/army.cpp \
-    database/text.cpp \
 	database/database.cpp \
     database/unit.cpp \
     database/model.cpp \
+	database/abstract_database.cpp \
     gui/mainwindow.cpp \
     gui/db_viewer.cpp \
 	gui/add_dataset.cpp \
@@ -23,9 +23,9 @@ SOURCES += \
 HEADERS += \
     database/army.h \
     database/database.h \
-    database/text.h \
     database/unit.h \
     database/model.h \
+	database/abstract_database.h \
     generic/print.h \
     generic/qt_conversions.h \
     generic/qt_table.h \

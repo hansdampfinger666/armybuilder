@@ -1,11 +1,15 @@
 #include "database.h"
 
 Db::Db()
-  : texts_(new class Texts)
-  , armies_(new class Armies(texts_))
-  , units_(new class Units(texts_))
-  , models_(new class Models(texts_))
-{}
+  : texts_(new Texts)
+  , armies_(new Armies(armies_field_names_, armies_id_field_pos_))
+  , units_(new Units(units_field_names_, units_id_field_pos_))
+  , models_(new Models(models_field_names_, models_id_field_pos_))
+{
+  armies_->texts_ = texts_;
+  units_->texts_ = texts_;
+  models_->texts_ = texts_;
+}
 
 Db::~Db()
 {

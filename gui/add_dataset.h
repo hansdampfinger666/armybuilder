@@ -13,6 +13,7 @@
 #include <QLabel>
 
 #include <database/database.h>
+#include <generic/print.h>
 #include <generic/types.h>
 
 #include <iostream>
@@ -27,8 +28,8 @@ public:
   ~AddDataset();
 
   void switch_view(const DBTypes new_view);
-  
-public slots: 
+
+public slots:
   void army_drop_down_changed(const QString& txt);
 
 private:

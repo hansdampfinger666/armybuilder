@@ -2,11 +2,12 @@
 
 #include <database/army.h>
 #include <database/model.h>
-#include <database/text.h>
 #include <database/unit.h>
-#include <generic/serialize.h>
 
-#include <iostream>
+static const string text_db_path = std::filesystem::current_path() /= "TEXTS";
+static const string army_db_path = std::filesystem::current_path() /= "ARMY";
+static const string unit_db_path = std::filesystem::current_path() /= "UNITS";
+static const string model_db_path = std::filesystem::current_path() /= "MODELS";
 
 enum DBTypes : i32
 {
@@ -20,17 +21,29 @@ enum DBTypes : i32
 class Db
 {
 public:
-  Texts* texts_;
-  Armies* armies_;
-  Units* units_;
-  Models* models_;
-
   const vector<string> db_txt_{
     "Texts",
     "Armies",
     "Units",
     "Models",
   };
+
+  const vector<string> armies_field_names_{ "ID", "Name" };
+  const vector<string> units_field_names_{ "Army", "ID", "Name" };
+  const vector<string> models_field_names_{
+    "Army",
+    "Unit",
+    "ID",
+    "Name",
+  };
+  const u32 armies_id_field_pos_ = 0;
+  const u32 units_id_field_pos_ = 1;
+  const u32 models_id_field_pos_ = 2;
+
+  Texts* texts_ = nullptr;
+  Armies* armies_ = nullptr;
+  Units* units_ = nullptr;
+  Models* models_ = nullptr;
 
   Db();
   ~Db();
@@ -42,11 +55,3 @@ private:
   void create_unit_db(Units& units);
   void create_model_db(Models& models);
 };
-
-static const string text_db_path = std::filesystem::current_path() /= "TEXTS";
-static const string army_db_path = std::filesystem::current_path() /=
-  "ARMY";
-static const string unit_db_path = std::filesystem::current_path() /=
-  "UNITS";
-static const string model_db_path = std::filesystem::current_path() /=
-  "MODELS";

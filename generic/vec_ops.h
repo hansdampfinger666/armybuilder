@@ -13,12 +13,12 @@ exists(const vector<T>& vec, const T& what);
 #define WHERE(vec, cond)                                                       \
   where<decltype(vec)::value_type>(vec, [&](const auto& val) { cond; });
 
-  // this index_diff is the result of a calculation of difference
-  // between two vectors v1 and v2
-  // it describes all move operations that have to take place within
-  // v1 to get v2 as a result:
-  // move_operation[n...] --> v1[new_idx[n...]] = v1[old_idx[n...]]
-  // so that at the end: v1 == v2
+// this index_diff is the result of a calculation of difference
+// between two vectors v1 and v2
+// it describes all move operations that have to take place within
+// v1 to get v2 as a result:
+// move_operation[n...] --> v1[new_idx[n...]] = v1[old_idx[n...]]
+// so that at the end: v1 == v2
 struct index_diff
 {
   vector<size_t> old_idx, new_idx;
@@ -231,7 +231,8 @@ get_values(const vector<T>& vec, const vector<size_t>& vec_indexes)
   result.reserve(vec_indexes.size());
 
   for (size_t result_index = 0; const auto index : vec_indexes) {
-    result[result_index++] = vec[index];
+    result[result_index] = vec[index];
+    result_index++;
   }
   return result;
 }

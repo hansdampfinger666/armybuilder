@@ -34,5 +34,5 @@ private:
 
   void switch_tables(const DBTypes db_type);
   void get_selected_ids();
-  vector<i32> extract_ids_from_selection(const QTableView* table_view, const i32 id_position);
+  vector<i32> extract_ids_from_selection(const QTableView* table_view);
 };

@@ -63,31 +63,34 @@ DatabaseViewer::switch_tables(const DBTypes db_type)
     case NONE:
       break;
     case TEXTS:
-      create_table_model(table_model_,
-                         db_->texts_->field_names_,
-                         db_->texts_->id_,
-                         db_->texts_->txt_);
+      qt_table::create_table_model(table_model_,
+                                   db_->texts_->field_names_,
+                                   db_->texts_->id_,
+                                   db_->texts_->txt_);
       break;
     case ARMIES:
-      create_table_model(table_model_,
-                         db_->armies_->field_names_,
-                         db_->armies_->id_,
-                         db_->texts_->get_txts(db_->armies_->txt_id_));
+      qt_table::create_table_model(
+        table_model_,
+        db_->armies_->field_names_,
+        db_->armies_->id_,
+        db_->texts_->get_names(db_->armies_->txt_id_));
       break;
     case UNITS:
-      create_table_model(table_model_,
-                         db_->units_->field_names_,
-                         db_->armies_->get_names(db_->units_->army_id_),
-                         db_->units_->id_,
-                         db_->texts_->get_txts(db_->units_->txt_id_));
+      qt_table::create_table_model(
+        table_model_,
+        db_->units_->field_names_,
+        db_->armies_->get_names(db_->units_->army_id_),
+        db_->units_->id_,
+        db_->texts_->get_names(db_->units_->txt_id_));
       break;
     case MODELS:
-      create_table_model(table_model_,
-                         db_->models_->field_names_,
-                         db_->armies_->get_names(db_->models_->army_id_),
-                         db_->units_->get_names(db_->models_->unit_id_),
-                         db_->models_->id_,
-                         db_->texts_->get_txts(db_->models_->txt_id_));
+      qt_table::create_table_model(
+        table_model_,
+        db_->models_->field_names_,
+        db_->armies_->get_names(db_->models_->army_id_),
+        db_->units_->get_names(db_->models_->unit_id_),
+        db_->models_->id_,
+        db_->texts_->get_names(db_->models_->txt_id_));
       break;
     default:
       break;
@@ -102,23 +105,19 @@ DatabaseViewer::get_selected_ids()
     case NONE:
       break;
     case TEXTS: {
-      auto ids = extract_ids_from_selection(table_view_,
-                                            db_->texts_->id_table_position_);
+      auto ids = extract_ids_from_selection(table_view_);
       break;
     }
     case ARMIES: {
-      auto ids = extract_ids_from_selection(table_view_,
-                                            db_->armies_->id_table_position_);
+      auto ids = extract_ids_from_selection(table_view_);
       break;
     }
     case UNITS: {
-      auto ids = extract_ids_from_selection(table_view_,
-                                            db_->units_->id_table_position_);
+      auto ids = extract_ids_from_selection(table_view_);
       break;
     }
     case MODELS: {
-      auto ids = extract_ids_from_selection(table_view_,
-                                            db_->models_->id_table_position_);
+      auto ids = extract_ids_from_selection(table_view_);
       break;
     }
     default:
@@ -127,8 +126,7 @@ DatabaseViewer::get_selected_ids()
 }
 
 vector<i32>
-DatabaseViewer::extract_ids_from_selection(const QTableView* table_view,
-                                           const i32 id_position)
+DatabaseViewer::extract_ids_from_selection(const QTableView* table_view)
 {
   vector<i32> result;
   for (i32 i = 0;
@@ -147,8 +145,8 @@ DatabaseViewer::extract_ids_from_selection(const QTableView* table_view,
 void
 DatabaseViewer::add_dataset()
 {
-	auto add_dataset = new AddDataset(this, db_, active_view_);
-	add_dataset->show();
+  auto add_dataset = new AddDataset(this, db_, active_view_);
+  add_dataset->show();
 }
 
 DatabaseViewer::~DatabaseViewer() {}

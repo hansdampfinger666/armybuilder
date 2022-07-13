@@ -1,10 +1,6 @@
 #include "army.h"
 
-Armies::Armies(Texts* texts)
-  : texts_(texts)
-{}
-
-i32
+u64
 Armies::add(const string& name)
 {
   auto txt_id_db = texts_->add(name);
@@ -16,7 +12,7 @@ Armies::add(const string& name)
     return append({ 0, txt_id_db });
 }
 
-i32
+u64
 Armies::append(const Army& army)
 {
   curr_id_++;
@@ -27,7 +23,7 @@ Armies::append(const Army& army)
 }
 
 bool
-Armies::del(const i32 id, Armies& trashbin)
+Armies::del(const u64 id, Armies& trashbin)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -40,48 +36,10 @@ Armies::del(const i32 id, Armies& trashbin)
 }
 
 std::optional<Armies::Army>
-Armies::get(const i32 id)
+Armies::get(const u64 id)
 {
   auto index = vec::index(id_, id);
   if (!index)
     return {};
-
   return Army{ id_[index.value()], txt_id_[index.value()] };
-}
-
-vector<string>
-Armies::get_names(const vector<i32>& ids)
-{
-  vector<i32> txt_ids(ids.size(), 0);
-
-  for (i32 i = 0; auto id : ids) {
-    auto index = vec::index(id_, id);
-    if (!index)
-      continue;
-    txt_ids[i] = txt_id_[index.value()];
-    i++;
-  }
-  return texts_->get_txts(txt_ids);
-}
-
-vector<string>
-Armies::get_names()
-{
-  return texts_->get_txts(txt_id_);
-}
-
-string
-Armies::get_name(const i32 id)
-{
-  auto result = vec::vkkv(id, id_, txt_id_, texts_->id_, texts_->txt_);
-  if (result)
-    return result.value();
-  else
-    return "";
-}
-
-std::optional<i32> 
-Armies::get_id(const string& name)
-{
-	return vec::vkkv(name, texts_->txt_, texts_->id_, txt_id_, id_);
 }
