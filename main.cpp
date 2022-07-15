@@ -4,7 +4,7 @@
 #include <gui/mainwindow.h>
 
 // TODO
-// - implement context aware drop down menus
+// implement adding new data sets in DatabaseViewer
 
 int
 main(int argc, char* argv[])

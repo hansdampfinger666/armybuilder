@@ -9,69 +9,107 @@ AddDataset::AddDataset(QWidget* parent, const Db* db, const DBTypes active_view)
 }
 
 void
+AddDataset::set_window_title(const DBTypes new_view)
+{
+  auto title =
+    QString::fromStdString({ "Add dataset: " + db_->db_txt_[new_view - 1] });
+  this->setWindowTitle(title);
+}
+
+void
 AddDataset::switch_view(const DBTypes new_view)
 {
   if (new_view == active_view_)
     return;
 
   active_view_ = new_view;
-  i32 column = 0;
+  set_window_title(active_view_);
   i32 row = 0;
+  i32 column = 0;
 
   switch (active_view_) {
     case NONE:
       break;
     case TEXTS: {
+      qt_generate::draw_label_column(
+        this, layout_, db_->texts_->field_names_, row, column);
+      row = 0;
+      column++;
+      auto id_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
+      for (auto line_edit : id_edit) {
+        line_edit->setReadOnly(true);
+        line_edit->setText(QString::number(db_->texts_->curr_id_ + 1));
+      }
+      auto data_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
     }
     case ARMIES: {
-      for (const auto& label_txt : db_->armies_->field_names_) {
-        layout_->addWidget(
-          new QLabel(QString::fromStdString(label_txt), this), column, 0);
-        column++;
+      qt_generate::draw_label_column(
+        this, layout_, db_->armies_->field_names_, row, column);
+      row = 0;
+      column++;
+      auto id_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
+      for (auto line_edit : id_edit) {
+        line_edit->setReadOnly(true);
+        line_edit->setText(QString::number(db_->armies_->curr_id_ + 1));
       }
-      row = db_->armies_->field_names_.size();
+      auto data_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
     }
     case UNITS: {
-      for (const auto& label_txt : db_->units_->field_names_) {
-        layout_->addWidget(
-          new QLabel(QString::fromStdString(label_txt), this), column, 0);
-        column++;
-      }
+      qt_generate::draw_label_column(
+        this, layout_, db_->units_->field_names_, row, column);
       army_drop_down_ = new QComboBox(this);
-      for (const auto& army_name : db_->armies_->get_names()) {
-        army_drop_down_->addItem(QString::fromStdString(army_name));
-      }
+      army_drop_down_->addItems(qt_conv(db_->armies_->get_names()));
       layout_->addWidget(army_drop_down_, 0, 1);
       QObject::connect(army_drop_down_,
                        &QComboBox::currentTextChanged,
                        this,
                        &AddDataset::army_drop_down_changed);
-      row = db_->units_->field_names_.size();
+      row = 1;
+      column++;
+      auto id_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
+      for (auto line_edit : id_edit) {
+        line_edit->setReadOnly(true);
+        line_edit->setText(QString::number(db_->units_->curr_id_ + 1));
+      }
+      auto data_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
     }
     case MODELS: {
-      for (const auto& label_txt : db_->models_->field_names_) {
-        layout_->addWidget(
-          new QLabel(QString::fromStdString(label_txt), this), column, 0);
-        column++;
-      }
+      qt_generate::draw_label_column(
+        this, layout_, db_->models_->field_names_, row, column);
       army_drop_down_ = new QComboBox(this);
       unit_drop_down_ = new QComboBox(this);
-      for (const auto& army_name : db_->armies_->get_names()) {
-        army_drop_down_->addItem(QString::fromStdString(army_name));
-      }
-      for (const auto& unit_name : db_->units_->get_names()) {
-        unit_drop_down_->addItem(QString::fromStdString(unit_name));
-      }
-      layout_->addWidget(army_drop_down_, 0, 1);
-      layout_->addWidget(unit_drop_down_, 1, 1);
+      army_drop_down_->addItems(qt_conv(db_->armies_->get_names()));
+      if (army_drop_down_val_.empty())
+        army_drop_down_changed(army_drop_down_->currentText());
+      else
+        army_drop_down_changed(QString::fromStdString(army_drop_down_val_));
+			row = 0;
+			column++;
+      layout_->addWidget(army_drop_down_, row, column);
+			row++;
+      layout_->addWidget(unit_drop_down_, row, column);
+			row++;
       QObject::connect(army_drop_down_,
                        &QComboBox::currentTextChanged,
                        this,
                        &AddDataset::army_drop_down_changed);
-      row = db_->models_->field_names_.size();
+      auto id_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
+      for (auto line_edit : id_edit) {
+        line_edit->setReadOnly(true);
+        line_edit->setText(QString::number(db_->models_->curr_id_ + 1));
+      }
+      auto data_edit =
+        qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
     }
     default:
@@ -79,7 +117,7 @@ AddDataset::switch_view(const DBTypes new_view)
   }
   auto ok_canc_buttons =
     new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-  layout_->addWidget(ok_canc_buttons, column, 0, row - 1, 2);
+  layout_->addWidget(ok_canc_buttons, row, 0, row - 1, 2);
   QObject::connect(
     ok_canc_buttons, &QDialogButtonBox::rejected, this, &AddDataset::close);
 }
@@ -87,30 +125,18 @@ AddDataset::switch_view(const DBTypes new_view)
 void
 AddDataset::army_drop_down_changed(const QString& txt)
 {
-  std::cout << "army drop down value changed\n";
   auto str = txt.toStdString();
   if (army_drop_down_val_ == str)
     return;
   army_drop_down_val_ = str;
-  std::cout << "army drop down changed to str: " << str << "\n";
-  auto army_txt_id = db_->texts_->get_id(str);
 
-  std::optional<i32> army_id;
-  if (army_txt_id)
-    army_id = db_->armies_->get_id(str);
-  else
-    return;
-  // if there is a unit drop down around, clear and rebuild that
-  if (!unit_drop_down_)
+  auto army_id = db_->armies_->get_id(str);
+  if (!army_id || !unit_drop_down_)
     return;
   unit_drop_down_->clear();
   auto unit_ids = db_->units_->get_ids_by_army(army_id.value());
-  auto unit_txts =
-    db_->units_->get_names(db_->units_->get_ids_by_army(army_id.value()));
-  for (const auto& unit_txt :
-       db_->units_->get_names(db_->units_->get_ids_by_army(army_id.value()))) {
-    unit_drop_down_->addItem(QString::fromStdString(unit_txt));
-  }
+  auto unit_txts = db_->units_->get_names(unit_ids);
+  unit_drop_down_->addItems(qt_conv(unit_txts));
 }
 
 AddDataset::~AddDataset() {}

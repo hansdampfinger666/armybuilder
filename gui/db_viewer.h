@@ -8,9 +8,9 @@
 #include <QWidget>
 
 #include <database/database.h>
-#include <generic/qt_table.h>
 #include <generic/types.h>
 #include <gui/add_dataset.h>
+#include <guitools/qt_generate.h>
 
 class DatabaseViewer : public QWidget
 {
@@ -33,6 +33,7 @@ private:
   vector<i32> selected_ids_;
 
   void switch_tables(const DBTypes db_type);
+	void set_window_title(const DBTypes new_view);
   void get_selected_ids();
   vector<i32> extract_ids_from_selection(const QTableView* table_view);
 };

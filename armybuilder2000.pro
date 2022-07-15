@@ -18,6 +18,7 @@ SOURCES += \
     gui/mainwindow.cpp \
     gui/db_viewer.cpp \
 	gui/add_dataset.cpp \
+	guitools/qt_generate.cpp \
     main.cpp
 
 HEADERS += \
@@ -27,12 +28,12 @@ HEADERS += \
     database/model.h \
 	database/abstract_database.h \
     generic/print.h \
-    generic/qt_conversions.h \
-    generic/qt_table.h \
     generic/serialize.h \
     generic/test_data.h \
     generic/types.h \
     generic/vec_ops.h \
+    guitools/qt_conversions.h \
+		guitools/qt_generate.h \
     gui/mainwindow.h \
     gui/db_viewer.h \
 	gui/add_dataset.h

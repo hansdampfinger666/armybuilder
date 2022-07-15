@@ -29,5 +29,5 @@ public:
   vector<u64> get_ids_by_army(const u64 army_id);
   u64 append(const Unit& unit);
 
-  CEREAL_LD_SV(army_id_, id_, txt_id_);
+  CEREAL_LD_SV(army_id_, id_, txt_id_, curr_id_, frag_);
 };

@@ -51,6 +51,14 @@ DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
 }
 
 void
+DatabaseViewer::set_window_title(const DBTypes new_view)
+{
+  auto title =
+   QString::fromStdString({ "Database: " + db_->db_txt_[new_view - 1] });
+  this->setWindowTitle(title);
+}
+
+void
 DatabaseViewer::switch_tables(const DBTypes db_type)
 {
   if (active_view_ == db_type)
@@ -58,25 +66,26 @@ DatabaseViewer::switch_tables(const DBTypes db_type)
 
   table_model_->clear();
   active_view_ = db_type;
+	set_window_title(active_view_);
 
   switch (db_type) {
     case NONE:
       break;
     case TEXTS:
-      qt_table::create_table_model(table_model_,
+      qt_generate::create_table_model(table_model_,
                                    db_->texts_->field_names_,
                                    db_->texts_->id_,
                                    db_->texts_->txt_);
       break;
     case ARMIES:
-      qt_table::create_table_model(
+      qt_generate::create_table_model(
         table_model_,
         db_->armies_->field_names_,
         db_->armies_->id_,
         db_->texts_->get_names(db_->armies_->txt_id_));
       break;
     case UNITS:
-      qt_table::create_table_model(
+      qt_generate::create_table_model(
         table_model_,
         db_->units_->field_names_,
         db_->armies_->get_names(db_->units_->army_id_),
@@ -84,7 +93,7 @@ DatabaseViewer::switch_tables(const DBTypes db_type)
         db_->texts_->get_names(db_->units_->txt_id_));
       break;
     case MODELS:
-      qt_table::create_table_model(
+      qt_generate::create_table_model(
         table_model_,
         db_->models_->field_names_,
         db_->armies_->get_names(db_->models_->army_id_),
