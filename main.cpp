@@ -5,6 +5,7 @@
 
 // TODO
 // implement adding new data sets in DatabaseViewer
+//  kinda works, but the update of the GUI is super broken
 
 int
 main(int argc, char* argv[])

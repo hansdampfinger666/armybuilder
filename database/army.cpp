@@ -43,3 +43,15 @@ Armies::get(const u64 id)
     return {};
   return Army{ id_[index.value()], txt_id_[index.value()] };
 }
+
+  opt<Armies::ArmyReadable> 
+  Armies::get_readable(const u64 id)
+{
+	auto index = vec::index(id_, id);	
+	if(!index)
+		return {};
+	ArmyReadable army_read;
+	army_read.id_ = id_[index.value()];
+	army_read.txt_ = get_name(index.value()).value(); 
+	return army_read;
+}

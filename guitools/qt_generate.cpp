@@ -1,6 +1,5 @@
 #include "qt_generate.h"
 
-// TODO probably able to get layout indirectly with parent->layout
 void
 qt_generate::draw_label_column(QWidget* parent,
                                QGridLayout* layout,
@@ -21,14 +20,16 @@ qt_generate::draw_line_edit_column(QWidget* parent,
                                    QGridLayout* layout,
                                    i32& starting_row,
                                    const i32 column,
-																	 const u32 quantity)
+                                   const u32 quantity)
 {
-	vector<QLineEdit*> result;
-	for (u32 i = 0; i <= quantity; i++) {
-		auto line = new QLineEdit(parent);
-		layout->addWidget(line, starting_row, column);
-		starting_row = starting_row + i;
-		result.emplace_back(line);
-	}
-	return result;
+  vector<QLineEdit*> result;
+  for (u32 i = 1; i <= quantity; i++) {
+    auto line = new QLineEdit(parent);
+    layout->addWidget(line, starting_row, column);
+    starting_row = starting_row + i;
+    result.emplace_back(line);
+  
+  return result;
+}
+
 }

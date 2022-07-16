@@ -6,7 +6,7 @@ AbstractDatabase::add(const string& name)
   // TODO this should be possible, maybe with some kind of type erasure
 }
 
-string
+std::optional<string>
 AbstractDatabase::get_name(const u64 id)
 {
   auto result = vec::vkkv(id, id_, txt_id_, texts_->id_, texts_->txt_);
@@ -105,6 +105,15 @@ vector<u64>
 Texts::get_ids(const vector<size_t>& indexes)
 {
   return vec::get_values(id_, indexes);
+}
+
+opt<string>
+Texts::get_name(const u64 id)
+{
+  for (auto i : id_)
+    if (id == i)
+      return txt_[i];
+  return {};
 }
 
 vector<string>

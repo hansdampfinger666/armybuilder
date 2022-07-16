@@ -37,6 +37,20 @@ Models::add(const string& name, const u64 unit_id, const u64 army_id)
   return id;
 }
 
+  opt<Models::ModelReadable> 
+  Models::get_readable(const u64 id)
+{
+	auto index = vec::index(id_, id);	
+	if(!index)
+		return {};
+	ModelReadable models_read;
+	models_read.id_ = id_[index.value()];
+	models_read.txt_ = get_name(index.value()).value(); 
+	models_read.army_txt_ = texts_->get_name(army_id_[index.value()]).value();
+	models_read.unit_txt_ = texts_->get_name(unit_id_[index.value()]).value();
+	return models_read;
+}
+
 u64
 Models::append(const Model& model)
 {

@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <optional>
 
 using i32 = int32_t; // int -2,147,483,648 to 2,147,483,647
 using i64 = int64_t; // long int -2,147,483,648 to 2,147,483,647
@@ -23,3 +24,5 @@ template<typename T, size_t N>
 using array = std::array<T, N>;
 template<typename T>
 using uptr = std::unique_ptr<T>;
+template<typename T>
+using opt = std::optional<T>;

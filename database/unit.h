@@ -18,12 +18,18 @@ public:
     u64 army_id_ = 0;
   };
 
+  struct UnitReadable : public AbstractDatabase::AbstractEntryReadable
+  {
+    string army_txt_ = { "" };
+  };
+
   vector<u64> army_id_;
 
   Units(const vector<string>& field_names, u32 id_field_position)
     : AbstractDatabase::AbstractDatabase(field_names, id_field_position){};
   u64 add(const string& name);
   u64 add(const string& name, const u64 army_id);
+  opt<UnitReadable> get_readable(const u64 id);
   bool del(const u64 id, Units& trashbin);
   std::optional<Unit> get(const u64 id);
   vector<u64> get_ids_by_army(const u64 army_id);

@@ -1,4 +1,5 @@
 #include "db_viewer.h"
+#include "guitools/qt_generate.h"
 
 DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
   : parent_(parent)
@@ -27,6 +28,8 @@ DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
                    &QItemSelectionModel::selectionChanged,
                    this,
                    &DatabaseViewer::get_selected_ids);
+  QObject::connect(table_model_, &QStandardItemModel::rowsInserted,
+		  		   table_view_, &QTableView::scrollToBottom);
   const DBTypes type{ 1 };
   switch_tables(type);
 
@@ -54,7 +57,7 @@ void
 DatabaseViewer::set_window_title(const DBTypes new_view)
 {
   auto title =
-   QString::fromStdString({ "Database: " + db_->db_txt_[new_view - 1] });
+    QString::fromStdString({ "Database: " + db_->db_txt_[new_view - 1] });
   this->setWindowTitle(title);
 }
 
@@ -66,16 +69,16 @@ DatabaseViewer::switch_tables(const DBTypes db_type)
 
   table_model_->clear();
   active_view_ = db_type;
-	set_window_title(active_view_);
+  set_window_title(active_view_);
 
   switch (db_type) {
     case NONE:
       break;
     case TEXTS:
       qt_generate::create_table_model(table_model_,
-                                   db_->texts_->field_names_,
-                                   db_->texts_->id_,
-                                   db_->texts_->txt_);
+                                      db_->texts_->field_names_,
+                                      db_->texts_->id_,
+                                      db_->texts_->txt_);
       break;
     case ARMIES:
       qt_generate::create_table_model(
@@ -155,7 +158,57 @@ void
 DatabaseViewer::add_dataset()
 {
   auto add_dataset = new AddDataset(this, db_, active_view_);
+  QObject::connect(add_dataset,
+                   &AddDataset::added_db_entry,
+                   this,
+                   &DatabaseViewer::fetch_new_db_entry);
   add_dataset->show();
+}
+
+void
+DatabaseViewer::fetch_new_db_entry(const u64 id)
+{
+  switch (active_view_) {
+    case NONE:
+      break;
+    case TEXTS: {
+      auto text = db_->texts_->get(id);
+      if (!text)
+        return;
+      qt_generate::append_row(
+        table_model_, text.value().id_, text.value().txt_);
+      break;
+    }
+    case ARMIES: {
+      auto army = db_->armies_->get_readable(id);
+      if (!army)
+        return;
+      qt_generate::append_row(
+        table_model_, army.value().id_, army.value().txt_);
+      break;
+    }
+    case UNITS: {
+      auto unit = db_->units_->get_readable(id);
+      if (!unit)
+        return;
+      qt_generate::append_row(
+        table_model_, unit->army_txt_, unit->id_, unit->txt_);
+      break;
+    }
+    case MODELS: {
+      auto model = db_->models_->get_readable(id);
+      if (!model)
+        return;
+      qt_generate::append_row(table_model_,
+                              model->army_txt_,
+                              model->unit_txt_,
+                              model->id_,
+                              model->txt_);
+      break;
+    }
+    default:
+      break;
+  }
 }
 
 DatabaseViewer::~DatabaseViewer() {}

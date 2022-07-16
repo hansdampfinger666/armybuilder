@@ -170,7 +170,7 @@ calc_frag(const vector<T>& vec)
 
 template<typename U, typename... Ts>
 requires std::is_default_constructible<U>::value void
-defrag(vector<U>& vec, Ts... vecs)
+defrag(vector<U>& vec, Ts&... vecs)
 {
   U initial = {};
   size_t left = 0;

@@ -17,6 +17,8 @@
 #include <generic/types.h>
 #include <guitools/qt_generate.h>
 
+#include <iostream>
+
 class AddDataset : public QWidget
 {
   Q_OBJECT
@@ -26,8 +28,12 @@ public:
   AddDataset(QWidget* parent, const Db* db, const DBTypes active_view);
   ~AddDataset();
 
+signals:
+  void added_db_entry(const u64 id);
+
 public slots:
   void army_drop_down_changed(const QString& txt);
+  void commit_changes();
 
 private:
   const Db* db_ = nullptr;
@@ -36,7 +42,9 @@ private:
   QComboBox* army_drop_down_ = nullptr;
   QComboBox* unit_drop_down_ = nullptr;
   string army_drop_down_val_;
+  
+  vector<QLineEdit*> data_edit_;
 
   void switch_view(const DBTypes new_view);
-	void set_window_title(const DBTypes new_view);
+  void set_window_title(const DBTypes new_view);
 };

@@ -16,6 +16,12 @@ public:
     u64 txt_id_ = 0;
   };
 
+  struct AbstractEntryReadable
+  {
+	  u64 id_ = 0;
+	  string txt_ = "";
+  };
+
   vector<string> field_names_;
   u32 id_field_position_;
 
@@ -30,11 +36,11 @@ public:
     : field_names_(field_names)
     , id_field_position_(id_field_position){};
   u64 add(const string& name);
-  string get_name(const u64 id);
+  opt<string> get_name(const u64 id);
   vector<string> get_names();
   vector<string> get_names(const vector<u64>& ids);
   vector<string> get_names_by_idx(const vector<size_t>& indexes);
-  std::optional<u64> get_id(const string& name);
+  opt<u64> get_id(const string& name);
   vector<u64> get_ids(const vector<size_t>& indexes);
 };
 
@@ -73,8 +79,9 @@ public:
   u64 add(const string& txt);
   u64 add(const u64 id, const string& txt);
   bool del(const u64 id, Texts& trashbin);
-  std::optional<Text> get(const u64 id);
-  std::optional<u64> get_id(const string& txt);
+  opt<Text> get(const u64 id);
+  opt<string> get_name(const u64 id);
+  opt<u64> get_id(const string& txt);
   vector<u64> get_ids(const vector<size_t>& indexes);
   vector<string> get_names(const vector<u64>& ids);
   vector<string> get_names_by_index(const vector<size_t>& indexes);

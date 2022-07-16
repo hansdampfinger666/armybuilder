@@ -62,6 +62,19 @@ Units::get(const u64 id)
   return fetched_unit.value();
 }
 
+  opt<Units::UnitReadable> 
+  Units::get_readable(const u64 id)
+{
+	auto index = vec::index(id_, id);	
+	if(!index)
+		return {};
+	UnitReadable unit_read;
+	unit_read.id_ = id_[index.value()];
+	unit_read.txt_ = get_name(index.value()).value(); 
+	unit_read.army_txt_ = texts_->get_name(army_id_[index.value()]).value();
+	return unit_read;
+}
+  
 vector<u64>
 Units::get_ids_by_army(const u64 army_id)
 {
