@@ -44,6 +44,10 @@ DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
                    &QPushButton::clicked,
                    this,
                    &DatabaseViewer::add_dataset);
+  QObject::connect(del_dataset_button,
+                   &QPushButton::clicked,
+                   this,
+                   &DatabaseViewer::delete_datasets);
 
   // okay / cancel button box
   auto okay_canc_buttons =
@@ -113,50 +117,6 @@ DatabaseViewer::switch_tables(const DBTypes db_type)
 }
 
 void
-DatabaseViewer::get_selected_ids()
-{
-  switch (active_view_) {
-    case NONE:
-      break;
-    case TEXTS: {
-      auto ids = extract_ids_from_selection(table_view_);
-      break;
-    }
-    case ARMIES: {
-      auto ids = extract_ids_from_selection(table_view_);
-      break;
-    }
-    case UNITS: {
-      auto ids = extract_ids_from_selection(table_view_);
-      break;
-    }
-    case MODELS: {
-      auto ids = extract_ids_from_selection(table_view_);
-      break;
-    }
-    default:
-      break;
-  }
-}
-
-vector<i32>
-DatabaseViewer::extract_ids_from_selection(const QTableView* table_view)
-{
-  vector<i32> result;
-  for (i32 i = 0;
-       auto model_index : table_view->selectionModel()->selection().indexes()) {
-    i32 id = model_index.data().toInt();
-    if (i == 0 || result.size() == 0 || result[i - 1] == id) {
-      i++;
-      continue;
-    }
-    result.push_back(id);
-    i++;
-  }
-  return result;
-}
-
-void
 DatabaseViewer::add_dataset()
 {
   auto add_dataset = new AddDataset(this, db_, active_view_);
@@ -214,6 +174,56 @@ DatabaseViewer::fetch_new_db_entry(const u64 id)
       break;
   }
   table_view_->resizeColumnsToContents();
+}
+
+void
+DatabaseViewer::get_selected_ids()
+{
+  switch (active_view_) {
+    case NONE:
+      break;
+    case TEXTS: {
+      auto ids = extract_ids_from_selection(table_view_);
+      break;
+    }
+    case ARMIES: {
+      auto ids = extract_ids_from_selection(table_view_);
+      break;
+    }
+    case UNITS: {
+      auto ids = extract_ids_from_selection(table_view_);
+      break;
+    }
+    case MODELS: {
+      auto ids = extract_ids_from_selection(table_view_);
+      break;
+    }
+    default:
+      break;
+  }
+}
+
+vector<i32>
+DatabaseViewer::extract_ids_from_selection(const QTableView* table_view)
+{
+  vector<i32> result;
+  for (i32 i = 0;
+       auto model_index : table_view->selectionModel()->selection().indexes()) {
+    i32 id = model_index.data().toInt();
+    if (i == 0 || result.size() == 0 || result[i - 1] == id) {
+      i++;
+      continue;
+    }
+    result.push_back(id);
+    i++;
+  }
+  return result;
+}
+
+void
+DatabaseViewer::delete_datasets()
+{
+	auto tab = new PrintTable(extract_ids_from_selection(table_view_));
 }
 
 DatabaseViewer::~DatabaseViewer() {}

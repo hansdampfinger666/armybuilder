@@ -37,10 +37,9 @@ AddDataset::switch_view(const DBTypes new_view)
       column++;
       auto id_display =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
-      for (auto line_edit : id_display) {
-        line_edit->setReadOnly(true);
-        line_edit->setText(QString::number(db_->texts_->curr_id_ + 1));
-      }
+      assert(id_display.size() == 1);
+      id_display[0]->setReadOnly(true);
+      id_display[0]->setText(QString::number(db_->texts_->curr_id_ + 1));
       data_edit_ =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
@@ -52,10 +51,9 @@ AddDataset::switch_view(const DBTypes new_view)
       column++;
       auto id_display =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
-      for (auto line_edit : id_display) {
-        line_edit->setReadOnly(true);
-        line_edit->setText(QString::number(db_->armies_->curr_id_ + 1));
-      }
+      assert(id_display.size() == 1);
+      id_display[0]->setReadOnly(true);
+      id_display[0]->setText(QString::number(db_->armies_->curr_id_ + 1));
       data_edit_ =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
@@ -65,7 +63,6 @@ AddDataset::switch_view(const DBTypes new_view)
         this, layout_, db_->units_->field_names_, row, column);
       army_drop_down_ = new QComboBox(this);
       army_drop_down_->addItems(qt_conv(db_->armies_->get_names()));
-      army_drop_down_val_ = army_drop_down_->currentText().toStdString();
       layout_->addWidget(army_drop_down_, 0, 1);
       QObject::connect(army_drop_down_,
                        &QComboBox::currentTextChanged,
@@ -75,10 +72,9 @@ AddDataset::switch_view(const DBTypes new_view)
       column++;
       auto id_display =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
-      for (auto line_edit : id_display) {
-        line_edit->setReadOnly(true);
-        line_edit->setText(QString::number(db_->units_->curr_id_ + 1));
-      }
+      assert(id_display.size() == 1);
+      id_display[0]->setReadOnly(true);
+      id_display[0]->setText(QString::number(db_->units_->curr_id_ + 1));
       data_edit_ =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;
@@ -89,11 +85,7 @@ AddDataset::switch_view(const DBTypes new_view)
       army_drop_down_ = new QComboBox(this);
       unit_drop_down_ = new QComboBox(this);
       army_drop_down_->addItems(qt_conv(db_->armies_->get_names()));
-      army_drop_down_val_ = army_drop_down_->currentText().toStdString();
-      if (army_drop_down_val_.empty())
-        army_drop_down_changed(army_drop_down_->currentText());
-      else
-        army_drop_down_changed(QString::fromStdString(army_drop_down_val_));
+      army_drop_down_changed(army_drop_down_->currentText());
       row = 0;
       column++;
       layout_->addWidget(army_drop_down_, row, column);
@@ -106,10 +98,9 @@ AddDataset::switch_view(const DBTypes new_view)
                        &AddDataset::army_drop_down_changed);
       auto id_display =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
-      for (auto line_edit : id_display) {
-        line_edit->setReadOnly(true);
-        line_edit->setText(QString::number(db_->models_->curr_id_ + 1));
-      }
+      assert(id_display.size() == 1);
+      id_display[0]->setReadOnly(true);
+      id_display[0]->setText(QString::number(db_->models_->curr_id_ + 1));
       data_edit_ =
         qt_generate::draw_line_edit_column(this, layout_, row, column, 1);
       break;

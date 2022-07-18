@@ -9,7 +9,7 @@
 // presumably because table name is too long for table width
 // print_table print("Indices where val == 1", result);
 
-struct print_table
+struct PrintTable
 {
   vector<u64> column_widths_ = {};
   i32 table_width_ = 0;
@@ -19,7 +19,7 @@ struct print_table
   i64 current_row_ = -1;
 
   template<typename... Ts>
-  print_table(const string&& table_name,
+  PrintTable(const string&& table_name,
               const vector<string>&& field_names,
               const vector<Ts>&... vecs)
     : field_names_(field_names)
@@ -38,7 +38,7 @@ struct print_table
   }
 
   template<typename... Ts>
-  print_table(const string&& table_name, const vector<Ts>&... vecs)
+  PrintTable(const string&& table_name, const vector<Ts>&... vecs)
   {
     prepare_field_name_data(vecs...);
     (calculate_column_width(vecs), ...);
@@ -54,7 +54,7 @@ struct print_table
   }
 
   template<typename... Ts>
-  print_table(const vector<Ts>&... vecs)
+  PrintTable(const vector<Ts>&... vecs)
   {
     prepare_field_name_data(vecs...);
     (calculate_column_width(vecs), ...);

@@ -12,6 +12,7 @@
 #include <gui/add_dataset.h>
 #include <guitools/qt_generate.h>
 
+#include <generic/print.h>
 #include <iostream>
 
 class DatabaseViewer : public QWidget
@@ -21,8 +22,6 @@ class DatabaseViewer : public QWidget
 public:
   DatabaseViewer(QWidget* parent, const Db* db);
   ~DatabaseViewer();
-
-  void add_dataset();
 
   public slots:
 	  void fetch_new_db_entry(const u64 id);
@@ -39,6 +38,8 @@ private:
 
   void switch_tables(const DBTypes db_type);
   void set_window_title(const DBTypes new_view);
+  void add_dataset();
+	void delete_datasets();
   void get_selected_ids();
   vector<i32> extract_ids_from_selection(const QTableView* table_view);
 };
