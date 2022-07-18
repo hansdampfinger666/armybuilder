@@ -10,6 +10,7 @@ QMAKE_CXXFLAGS += \
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+	performance/performance.cpp \
     database/army.cpp \
 	database/database.cpp \
     database/unit.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+	performance/performance.h \
     database/army.h \
     database/database.h \
     database/unit.h \
@@ -33,7 +35,7 @@ HEADERS += \
     generic/types.h \
     generic/vec_ops.h \
     guitools/qt_conversions.h \
-		guitools/qt_generate.h \
+	guitools/qt_generate.h \
     gui/mainwindow.h \
     gui/db_viewer.h \
 	gui/add_dataset.h

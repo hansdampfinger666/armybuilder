@@ -65,7 +65,7 @@ AddDataset::switch_view(const DBTypes new_view)
         this, layout_, db_->units_->field_names_, row, column);
       army_drop_down_ = new QComboBox(this);
       army_drop_down_->addItems(qt_conv(db_->armies_->get_names()));
-	  army_drop_down_val_ = army_drop_down_->currentText().toStdString();
+      army_drop_down_val_ = army_drop_down_->currentText().toStdString();
       layout_->addWidget(army_drop_down_, 0, 1);
       QObject::connect(army_drop_down_,
                        &QComboBox::currentTextChanged,
@@ -89,7 +89,7 @@ AddDataset::switch_view(const DBTypes new_view)
       army_drop_down_ = new QComboBox(this);
       unit_drop_down_ = new QComboBox(this);
       army_drop_down_->addItems(qt_conv(db_->armies_->get_names()));
-	  army_drop_down_val_ = army_drop_down_->currentText().toStdString();
+      army_drop_down_val_ = army_drop_down_->currentText().toStdString();
       if (army_drop_down_val_.empty())
         army_drop_down_changed(army_drop_down_->currentText());
       else
@@ -160,7 +160,6 @@ AddDataset::commit_changes()
     }
     case ARMIES: {
       assert(data_edit_.size() == 1);
-	  auto pls = data_edit_[0]->text().toStdString();
       added_id = db_->armies_->add(data_edit_[0]->text().toStdString());
       break;
     }

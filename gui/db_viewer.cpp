@@ -28,8 +28,10 @@ DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
                    &QItemSelectionModel::selectionChanged,
                    this,
                    &DatabaseViewer::get_selected_ids);
-  QObject::connect(table_model_, &QStandardItemModel::rowsInserted,
-		  		   table_view_, &QTableView::scrollToBottom);
+  QObject::connect(table_model_,
+                   &QStandardItemModel::rowsInserted,
+                   table_view_,
+                   &QTableView::scrollToBottom);
   const DBTypes type{ 1 };
   switch_tables(type);
 
@@ -191,8 +193,10 @@ DatabaseViewer::fetch_new_db_entry(const u64 id)
       auto unit = db_->units_->get_readable(id);
       if (!unit)
         return;
-      qt_generate::append_row(
-        table_model_, unit->army_txt_, unit->id_, unit->txt_);
+      qt_generate::append_row(table_model_,
+                              unit.value().army_txt_,
+                              unit.value().id_,
+                              unit.value().txt_);
       break;
     }
     case MODELS: {
@@ -209,6 +213,7 @@ DatabaseViewer::fetch_new_db_entry(const u64 id)
     default:
       break;
   }
+  table_view_->resizeColumnsToContents();
 }
 
 DatabaseViewer::~DatabaseViewer() {}

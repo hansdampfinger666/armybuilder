@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QStandardItemModel>
 #include <QString>
+#include <QTableView>
 #include <QWidget>
 
 #include <generic/types.h>

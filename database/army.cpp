@@ -52,6 +52,6 @@ Armies::get(const u64 id)
 		return {};
 	ArmyReadable army_read;
 	army_read.id_ = id_[index.value()];
-	army_read.txt_ = get_name(index.value()).value(); 
+	army_read.txt_ = get_name(id).value(); 
 	return army_read;
 }

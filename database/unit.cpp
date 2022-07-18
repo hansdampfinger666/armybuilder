@@ -70,7 +70,7 @@ Units::get(const u64 id)
 		return {};
 	UnitReadable unit_read;
 	unit_read.id_ = id_[index.value()];
-	unit_read.txt_ = get_name(index.value()).value(); 
+	unit_read.txt_ = get_name(id).value(); 
 	unit_read.army_txt_ = texts_->get_name(army_id_[index.value()]).value();
 	return unit_read;
 }
