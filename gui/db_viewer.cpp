@@ -27,7 +27,7 @@ DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
   QObject::connect(table_view_->selectionModel(),
                    &QItemSelectionModel::selectionChanged,
                    this,
-                   &DatabaseViewer::get_selected_ids);
+                   &DatabaseViewer::get_selected_ids_and_rows);
   QObject::connect(table_model_,
                    &QStandardItemModel::rowsInserted,
                    table_view_,
@@ -177,53 +177,88 @@ DatabaseViewer::fetch_new_db_entry(const u64 id)
 }
 
 void
-DatabaseViewer::get_selected_ids()
+DatabaseViewer::delete_datasets()
 {
+  auto tab = new PrintTable(get_selected_ids_and_rows().ids_);
+
+  // TODO Trashbins here are a place holder, can be used in the future for redo features
+  auto texts_trash = new Texts;
+  auto armies_trash =
+    new Armies(db_->armies_field_names_, db_->armies_id_field_pos_);
+  auto units_trash =
+    new Units(db_->units_field_names_, db_->units_id_field_pos_);
+  auto models_trash =
+    new Models(db_->models_field_names_, db_->models_id_field_pos_);
+
+  auto [ids, rows] = get_selected_ids_and_rows();
+
+  // TODO look here, deleting needs work to be stable
+
+  for (size_t i = 0; auto selected_id : ids) {
+    switch (active_view_) {
+      case NONE:
+        break;
+      case TEXTS:
+        db_->texts_->del(selected_id, *texts_trash);
+        break;
+      case ARMIES:
+        db_->armies_->del(selected_id, *armies_trash);
+        break;
+      case UNITS:
+        db_->units_->del(selected_id, *units_trash);
+        break;
+      case MODELS:
+        db_->models_->del(selected_id, *models_trash);
+        break;
+      default:
+        break;
+    }
+	qt_generate::delete_row(table_model_, rows[i]);
+	i++;
+  }
+}
+
+DatabaseViewer::ids_and_rows
+DatabaseViewer::get_selected_ids_and_rows()
+{
+  i32 id_field_position = -1;
   switch (active_view_) {
     case NONE:
       break;
-    case TEXTS: {
-      auto ids = extract_ids_from_selection(table_view_);
+    case TEXTS:
+      id_field_position = db_->texts_id_field_pos_;
       break;
-    }
-    case ARMIES: {
-      auto ids = extract_ids_from_selection(table_view_);
+    case ARMIES:
+      id_field_position = db_->armies_id_field_pos_;
       break;
-    }
-    case UNITS: {
-      auto ids = extract_ids_from_selection(table_view_);
+    case UNITS:
+      id_field_position = db_->units_id_field_pos_;
       break;
-    }
-    case MODELS: {
-      auto ids = extract_ids_from_selection(table_view_);
+    case MODELS:
+      id_field_position = db_->models_id_field_pos_;
       break;
-    }
     default:
       break;
   }
+  if (id_field_position == -1)
+    return {};
+  return extract_ids_from_selection(table_view_, id_field_position);
 }
 
-vector<i32>
-DatabaseViewer::extract_ids_from_selection(const QTableView* table_view)
+// vector<u64>
+DatabaseViewer::ids_and_rows
+DatabaseViewer::extract_ids_from_selection(const QTableView* table_view,
+                                           const u32 id_field_position)
 {
-  vector<i32> result;
-  for (i32 i = 0;
-       auto model_index : table_view->selectionModel()->selection().indexes()) {
-    i32 id = model_index.data().toInt();
-    if (i == 0 || result.size() == 0 || result[i - 1] == id) {
-      i++;
-      continue;
-    }
-    result.push_back(id);
-    i++;
+  ids_and_rows result;
+  //  vector<u64> result;
+  auto model_index_list = table_view->selectionModel()->selection().indexes();
+  for (auto& row :
+       table_view_->selectionModel()->selectedRows(id_field_position)) {
+    result.ids_.push_back(row.data().toInt());
+    result.rows_.push_back(row.row());
   }
   return result;
-}
-
-void
-DatabaseViewer::delete_datasets()
-{
-	auto tab = new PrintTable(extract_ids_from_selection(table_view_));
 }
 
 DatabaseViewer::~DatabaseViewer() {}

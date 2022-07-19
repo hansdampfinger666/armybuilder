@@ -55,7 +55,6 @@ template<typename... Ts>
 void
 append_row(QStandardItemModel* model, Ts&... values)
 {
-  // I think this is broken, GUI shows wrong values, db is okay
   QList<QStandardItem*> items;
   auto add_value_to_qlist = [](QList<QStandardItem*>& items, auto val) {
     items.append(new QStandardItem(qt_conv(val)));
@@ -63,5 +62,8 @@ append_row(QStandardItemModel* model, Ts&... values)
   (add_value_to_qlist(items, values), ...);
   model->appendRow(items);
 }
+
+void
+delete_row(QStandardItemModel* model, const u32 row_index);
 
 }

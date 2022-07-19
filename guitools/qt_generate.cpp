@@ -28,8 +28,12 @@ qt_generate::draw_line_edit_column(QWidget* parent,
     layout->addWidget(line, starting_row, column);
     starting_row = starting_row + i;
     result.emplace_back(line);
-  
+  }
   return result;
 }
 
+void
+qt_generate::delete_row(QStandardItemModel* model, const u32 row_index)
+{
+  model->takeRow(row_index);
 }

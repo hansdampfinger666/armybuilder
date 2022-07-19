@@ -20,11 +20,18 @@ class DatabaseViewer : public QWidget
   Q_OBJECT
 
 public:
+
+  struct ids_and_rows
+  {
+    vector<u64> ids_;
+    vector<i32> rows_;
+  };
+
   DatabaseViewer(QWidget* parent, const Db* db);
   ~DatabaseViewer();
 
-  public slots:
-	  void fetch_new_db_entry(const u64 id);
+public slots:
+  void fetch_new_db_entry(const u64 id);
 
 private:
   QWidget* parent_ = nullptr;
@@ -39,7 +46,8 @@ private:
   void switch_tables(const DBTypes db_type);
   void set_window_title(const DBTypes new_view);
   void add_dataset();
-	void delete_datasets();
-  void get_selected_ids();
-  vector<i32> extract_ids_from_selection(const QTableView* table_view);
+  void delete_datasets();
+  ids_and_rows get_selected_ids_and_rows();
+  ids_and_rows extract_ids_from_selection(const QTableView* table_view,
+                                         const u32 id_field_position);
 };
