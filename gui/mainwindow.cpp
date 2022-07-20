@@ -6,7 +6,12 @@ MainWindow::MainWindow(QWidget* parent)
   , ui(new Ui::MainWindow)
   , db_(new Db)
 {
+  const string perf_test_data = "Import from disk / creation of test data";
+  auto c1 = new performance::Clock(perf_test_data);
   db_->create_test_data();
+  delete c1;
+	performance::benchmark->print();
+	assert(performance::benchmark->ns_times_.size() == 1);
 
   // gui setup
   ui->setupUi(this);

@@ -6,6 +6,8 @@
 #include <gui/add_dataset.h>
 #include <gui/db_viewer.h>
 
+#include <performance/performance.h>
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;

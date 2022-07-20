@@ -4,8 +4,6 @@
 
 #include <database/abstract_database.h>
 
-class AbstractDatabase;
-
 class Armies : public AbstractDatabase
 {
 public:
