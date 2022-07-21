@@ -8,6 +8,7 @@ x_internal_*/
 *session.vim
 compile_commands.json
 armybuilder
+*.vim
 
 *~
 *.autosave

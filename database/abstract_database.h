@@ -1,8 +1,8 @@
 #pragma once
 
-#include <generic/serialize.h>
-#include <generic/types.h>
-#include <generic/vec_ops.h>
+#include <disk_io/serialize.h>
+#include <tools/types.h>
+#include <tools/vec_ops.h>
 //#include <boost/te.hpp>
 
 class Texts;

@@ -13,8 +13,8 @@
 #include <QLabel>
 
 #include <database/database.h>
-#include <generic/print.h>
-#include <generic/types.h>
+#include <tools/print.h>
+#include <tools/types.h>
 #include <guitools/qt_generate.h>
 
 #include <iostream>

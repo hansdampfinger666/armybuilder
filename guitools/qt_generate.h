@@ -8,7 +8,7 @@
 #include <QTableView>
 #include <QWidget>
 
-#include <generic/types.h>
+#include <tools/types.h>
 #include <guitools/qt_conversions.h>
 
 namespace qt_generate {

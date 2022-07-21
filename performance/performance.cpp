@@ -15,6 +15,7 @@ performance::Benchmark::save_clock(const Clock* clock)
       clock->end_ == std::chrono::steady_clock::time_point::min())
     return;
   clock_names_.push_back(clock->name_);
+  clock_dates_.push_back(clock->date_);
   ns_times_.push_back(std::chrono::duration_cast<std::chrono::nanoseconds>(
                         clock->end_ - clock->begin_)
                         .count());
@@ -28,27 +29,39 @@ performance::Benchmark::print()
     us.push_back(ns * ns_us_);
     ms.push_back(ns * ns_ms_);
     s.push_back(ns * ns_s_);
-}
+  }
   new PrintTable("Performance results",
-                 { "Clock name", "ns", "us", "ms", "s" },
+                 { "Clock name", "Date", "ns", "us", "ms", "s" },
                  clock_names_,
+                 clock_dates_,
                  ns_times_,
                  us,
-								 ms,
-								 s);
+                 ms,
+                 s);
 }
 
 performance::Clock::Clock(Benchmark* benchmark, const string& clock_name)
   : benchmark_(benchmark)
   , name_(clock_name)
 {
-  begin_ = std::chrono::steady_clock::now();
+  init();
 }
 
 performance::Clock::Clock(const string& clock_name)
   : benchmark_(performance::benchmark)
   , name_(clock_name)
 {
+  init();
+}
+
+void
+performance::Clock::init()
+{
+  auto time_t = std::time(0);
+  auto today = std::localtime(&time_t);
+  date_ = std::to_string(today->tm_mon + 1) + "/" +
+          std::to_string(today->tm_mday) + "/" +
+          std::to_string(today->tm_year + 1900);
   begin_ = std::chrono::steady_clock::now();
 }
 

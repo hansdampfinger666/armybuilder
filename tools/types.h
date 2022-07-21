@@ -26,3 +26,7 @@ template<typename T>
 using uptr = std::unique_ptr<T>;
 template<typename T>
 using opt = std::optional<T>;
+
+// TODO this is incorrect, this will also match strings, fix this
+template<typename T>
+concept Range = std::ranges::range<T>;

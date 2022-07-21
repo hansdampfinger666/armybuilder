@@ -1,7 +1,8 @@
 #pragma once
 
+#include <tools/types.h>
+
 #include <algorithm>
-#include <generic/types.h>
 #include <ranges>
 
 namespace vec {
@@ -224,37 +225,38 @@ template<typename T>
 void
 delete_duplicates(vector<T>& vec)
 {
-	for(size_t i = 0; const auto& entry : vec){
-		auto dupl_idx = index(vec, entry, i + 1, vec.size());
-		if(!dupl_idx) return;
-		vec.erase(vec.begin() + i);
-		i++;
-	}
+  for (size_t i = 0; const auto& entry : vec) {
+    auto dupl_idx = index(vec, entry, i + 1, vec.size());
+    if (!dupl_idx)
+      return;
+    vec.erase(vec.begin() + i);
+    i++;
+  }
 }
 
 template<typename T>
 void
 sort_and_delete_duplicates(vector<T>& vec)
 {
-	quick_sort(vec);
-	T prev_val {};
-	for(size_t i = 0; const auto& entry : vec){
-		if(entry == prev_val)
-			vec.erase(vec.begin() + i);
-		i++;
-	}
+  quick_sort(vec);
+  T prev_val{};
+  for (size_t i = 0; const auto& entry : vec) {
+    if (entry == prev_val)
+      vec.erase(vec.begin() + i);
+    i++;
+  }
 }
 
 template<typename T>
 vector<T>
 get_values(const vector<T>& vec, const vector<size_t>& vec_indexes)
 {
-	auto vec_indexes_cpy = vec_indexes;
-	delete_duplicates(vec_indexes_cpy);
+  auto vec_indexes_cpy = vec_indexes;
+  delete_duplicates(vec_indexes_cpy);
   vector<T> result;
 
-  for (const auto index : vec_indexes) 
-		result.push_back(vec[index]);
+  for (const auto index : vec_indexes)
+    result.push_back(vec[index]);
   return result;
 }
 
@@ -262,8 +264,8 @@ template<typename T>
 vector<T>
 get_values_parallel(const vector<T>& vec, const vector<size_t>& vec_indexes)
 {
-	auto vec_indexes_cpy = vec_indexes;
-	delete_duplicates(vec_indexes_cpy);
+  auto vec_indexes_cpy = vec_indexes;
+  delete_duplicates(vec_indexes_cpy);
   vector<T> result;
   result.reserve(vec_indexes.size());
 

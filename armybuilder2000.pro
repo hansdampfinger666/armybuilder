@@ -11,33 +11,35 @@ QMAKE_CXXFLAGS += \
 
 SOURCES += \
 	performance/performance.cpp \
-    database/army.cpp \
+	disk_io/csv.cpp \
+  database/army.cpp \
 	database/database.cpp \
-    database/unit.cpp \
-    database/model.cpp \
+  database/unit.cpp \
+  database/model.cpp \
 	database/abstract_database.cpp \
-    gui/mainwindow.cpp \
-    gui/db_viewer.cpp \
-	gui/add_dataset.cpp \
 	guitools/qt_generate.cpp \
-    main.cpp
+  gui/mainwindow.cpp \
+  gui/db_viewer.cpp \
+	gui/add_dataset.cpp \
+  main.cpp
 
 HEADERS += \
 	performance/performance.h \
-    database/army.h \
-    database/database.h \
-    database/unit.h \
-    database/model.h \
+	disk_io/csv.h \
+  disk_io/serialize.h \
+  database/army.h \
+  database/database.h \
+  database/unit.h \
+  database/model.h \
 	database/abstract_database.h \
-    generic/print.h \
-    generic/serialize.h \
-    generic/test_data.h \
-    generic/types.h \
-    generic/vec_ops.h \
-    guitools/qt_conversions.h \
+  tools/print.h \
+  tools/types.h \
+  tools/vec_ops.h \
+	tools/conversions.h \
+  guitools/qt_conversions.h \
 	guitools/qt_generate.h \
-    gui/mainwindow.h \
-    gui/db_viewer.h \
+  gui/mainwindow.h \
+  gui/db_viewer.h \
 	gui/add_dataset.h
 
 FORMS += \

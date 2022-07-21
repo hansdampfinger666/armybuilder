@@ -2,7 +2,7 @@
 
 #include <QStringList>
 
-#include <generic/types.h>
+#include <tools/types.h>
 
 template<typename T>
 QString

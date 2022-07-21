@@ -8,11 +8,11 @@
 #include <QWidget>
 
 #include <database/database.h>
-#include <generic/types.h>
+#include <tools/types.h>
 #include <gui/add_dataset.h>
 #include <guitools/qt_generate.h>
 
-#include <generic/print.h>
+#include <tools/print.h>
 #include <iostream>
 
 class DatabaseViewer : public QWidget

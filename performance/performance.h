@@ -1,11 +1,12 @@
 #pragma once
 
-#include <generic/print.h>
-#include <generic/serialize.h>
-#include <generic/types.h>
-#include <generic/vec_ops.h>
+#include <tools/print.h>
+#include <tools/types.h>
+#include <tools/vec_ops.h>
+#include <disk_io/serialize.h>
 
 #include <chrono>
+#include <ctime>
 
 namespace performance {
 
@@ -31,12 +32,13 @@ struct Clock
 {
   Benchmark* benchmark_ = nullptr;
   string name_ = {};
-  string data_ = {};
+  string date_ = {};
   std::chrono::steady_clock::time_point begin_ = {}, end_ = {};
 
   Clock(Benchmark* benchmark, const string& clock_name);
   Clock(const string& clock_name);
   ~Clock();
+	void init();
 };
 
 inline Benchmark* benchmark = new Benchmark("Armybuilder2000");

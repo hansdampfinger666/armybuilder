@@ -1,6 +1,7 @@
 #pragma once
 
-#include <generic/types.h>
+#include <tools/types.h>
+#include <tools/conversions.h>
 
 #include <iostream>
 #include <numeric>
@@ -74,7 +75,7 @@ struct PrintTable
   {
     if (field_names_.size() < sizeof...(vecs))
       for (size_t i = field_names_.size(); i < sizeof...(vecs); i++) {
-        field_names_.emplace_back("field" + stringify(i));
+        field_names_.emplace_back("field" + conv::stringify(i));
       }
     for (const auto& field_name : field_names_)
       if (field_name.length() > field_name_width_) {
@@ -89,28 +90,15 @@ struct PrintTable
     if (column_widths_.size() < vec.size())
       column_widths_.resize(vec.size(), 3);
     for (size_t i = 0; const auto& val : vec) {
-      auto len = stringify(val).length() > (stringify(i).length() + 2)
-                   ? stringify(val).length()
-                   : stringify(i).length() + 2;
+      auto len = conv::stringify(val).length() > (conv::stringify(i).length() + 2)
+                   ? conv::stringify(val).length()
+                   : conv::stringify(i).length() + 2;
 
       if (len > column_widths_[i]) {
         column_widths_[i] = len;
       }
       i++;
     }
-  }
-
-  template<typename T>
-  string stringify(const T& input)
-  {
-    return input;
-  }
-
-  template<typename T>
-  requires std::is_integral<T>::value || std::is_floating_point<T>::value string
-  stringify(const T& input)
-  {
-    return std::to_string(input);
   }
 
   i32 calculate_table_width()
@@ -158,7 +146,7 @@ struct PrintTable
     std::cout << "|";
 
     for (u64 i = 0; const auto width : column_widths_) {
-      for (u64 padding = 1; padding <= (width - 2 - stringify(i).length());
+      for (u64 padding = 1; padding <= (width - 2 - conv::stringify(i).length());
            padding++) {
         std::cout << " ";
       }
@@ -184,11 +172,11 @@ struct PrintTable
 
     for (u64 i = 0; const auto& val : vec) {
       for (u64 padding = 1;
-           padding <= (column_widths_[i] - stringify(val).length());
+           padding <= (column_widths_[i] - conv::stringify(val).length());
            padding++) {
         std::cout << " ";
       }
-      std::cout << stringify(val) << "|";
+      std::cout << conv::stringify(val) << "|";
       i++;
     }
     nl();
