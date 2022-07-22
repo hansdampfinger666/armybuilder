@@ -4,7 +4,6 @@
 #include <gui/mainwindow.h>
 
 // TODO
-// switched to i32 -> maybe bugs as a result? size_t != i32
 // feature: update existing datasets
 // housekeeping: codify mainwindow GUI as well
 
@@ -18,6 +17,7 @@ main(int argc, char* argv[])
 }
 
 // NOTES
+// switched to i32 -> maybe bugs as a result? size_t != i32
 // keeping dead data around in structure of arrays:
 //		keeping "dead" (id == 0) data sets around in the databases seems 
 //		like a good idea at first, to avoid erasing and reallocating vector 

@@ -86,6 +86,7 @@ public:
   vector<string> get_names(const vector<i32>& ids);
   vector<string> get_names_by_index(const vector<i32>& indexes);
   vector<i32> get_indexes(const TextsViewFilter filter);
+  bool update(const i32 id, const string& name, const Texts::Lng lng);
 
   CEREAL_LD_SV(id_, txt_, lng_, curr_id_, frag_);
 };

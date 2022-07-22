@@ -95,7 +95,7 @@ Texts::get_id(const string& txt)
 }
 
 vector<i32>
-                                          Texts::get_ids(const vector<i32>& indexes)
+Texts::get_ids(const vector<i32>& indexes)
 {
   return vec::get_values(id_, indexes);
 }
@@ -145,3 +145,10 @@ Texts::get_indexes(const TextsViewFilter filter)
       break;
   }
 }
+
+  bool 
+  Texts::update(const i32 id, const string& name, const Texts::Lng lng)
+{
+	
+}
+
