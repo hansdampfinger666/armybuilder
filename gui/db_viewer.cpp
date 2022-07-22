@@ -181,7 +181,8 @@ DatabaseViewer::delete_datasets()
 {
   auto tab = new PrintTable(get_selected_ids_and_rows().ids_);
 
-  // TODO Trashbins here are a place holder, can be used in the future for redo features
+  // TODO Trashbins here are a place holder, can be used in the future for
+  // redo features
   auto texts_trash = new Texts;
   auto armies_trash =
     new Armies(db_->armies_field_names_, db_->armies_id_field_pos_);
@@ -213,9 +214,13 @@ DatabaseViewer::delete_datasets()
       default:
         break;
     }
-	qt_generate::delete_row(table_model_, rows[i]);
-	i++;
+    qt_generate::delete_row(table_model_, rows[i]);
+    i++;
   }
+  delete texts_trash;
+  delete armies_trash;
+  delete units_trash;
+  delete models_trash;
 }
 
 DatabaseViewer::ids_and_rows
@@ -245,13 +250,11 @@ DatabaseViewer::get_selected_ids_and_rows()
   return extract_ids_from_selection(table_view_, id_field_position);
 }
 
-// vector<u64>
 DatabaseViewer::ids_and_rows
 DatabaseViewer::extract_ids_from_selection(const QTableView* table_view,
                                            const u32 id_field_position)
 {
   ids_and_rows result;
-  //  vector<u64> result;
   auto model_index_list = table_view->selectionModel()->selection().indexes();
   for (auto& row :
        table_view_->selectionModel()->selectedRows(id_field_position)) {

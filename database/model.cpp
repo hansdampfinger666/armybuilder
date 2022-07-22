@@ -37,18 +37,18 @@ Models::add(const string& name, const u64 unit_id, const u64 army_id)
   return id;
 }
 
-  opt<Models::ModelReadable> 
-  Models::get_readable(const u64 id)
+opt<Models::ModelReadable>
+Models::get_readable(const u64 id)
 {
-	auto index = vec::index(id_, id);	
-	if(!index)
-		return {};
-	ModelReadable models_read;
-	models_read.id_ = id_[index.value()];
-	models_read.txt_ = get_name(id).value(); 
-	models_read.army_txt_ = texts_->get_name(army_id_[index.value()]).value();
-	models_read.unit_txt_ = texts_->get_name(unit_id_[index.value()]).value();
-	return models_read;
+  auto index = vec::index(id_, id);
+  if (!index)
+    return {};
+  ModelReadable models_read;
+  models_read.id_ = id_[index.value()];
+  models_read.txt_ = get_name(id).value();
+  models_read.army_txt_ = texts_->get_name(army_id_[index.value()]).value();
+  models_read.unit_txt_ = texts_->get_name(unit_id_[index.value()]).value();
+  return models_read;
 }
 
 u64
@@ -69,10 +69,9 @@ Models::del(const u64 id, Models& trashbin)
   auto index = vec::index(id_, id);
   if (!index)
     return false;
-
-  auto trashed_model = get(index.value());
+  auto trashed_model = get(id);
   trashbin.append(trashed_model.value());
-  id_[index.value()] = 0;
+  vec::erase_at_index(index.value(), id_, txt_id_, army_id_, unit_id_);
   frag_ = vec::calc_frag(id_);
   return true;
 }
@@ -83,7 +82,7 @@ Models::get(const u64 id)
   auto index = vec::index(id_, id);
   if (!index)
     return {};
-
-  auto fetched_model = get(index.value());
-  return fetched_model.value();
+  auto fetched_model = Model{ { id_[index.value()], txt_id_[index.value()] },
+	  army_id_[index.value()], unit_id_[index.value()] };
+  return fetched_model;
 }

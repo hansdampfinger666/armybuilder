@@ -28,9 +28,9 @@ Armies::del(const u64 id, Armies& trashbin)
   auto index = vec::index(id_, id);
   if (!index)
     return false;
-
-  trashbin.append({ id_[index.value()], txt_id_[index.value()] });
-  id_[index.value()] = 0;
+  auto trashed_army = get(id);
+  trashbin.append(trashed_army.value());
+  vec::erase_at_index(index.value(), id_, txt_id_);
   frag_ = vec::calc_frag(id_);
   return true;
 }
@@ -44,14 +44,14 @@ Armies::get(const u64 id)
   return Army{ id_[index.value()], txt_id_[index.value()] };
 }
 
-  opt<Armies::ArmyReadable> 
-  Armies::get_readable(const u64 id)
+opt<Armies::ArmyReadable>
+Armies::get_readable(const u64 id)
 {
-	auto index = vec::index(id_, id);	
-	if(!index)
-		return {};
-	ArmyReadable army_read;
-	army_read.id_ = id_[index.value()];
-	army_read.txt_ = get_name(id).value(); 
-	return army_read;
+  auto index = vec::index(id_, id);
+  if (!index)
+    return {};
+  ArmyReadable army_read;
+  army_read.id_ = id_[index.value()];
+  army_read.txt_ = get_name(id).value();
+  return army_read;
 }

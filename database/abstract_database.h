@@ -18,8 +18,8 @@ public:
 
   struct AbstractEntryReadable
   {
-	  u64 id_ = 0;
-	  string txt_ = "";
+    u64 id_ = 0;
+    string txt_ = "";
   };
 
   vector<string> field_names_;
@@ -89,3 +89,4 @@ public:
 
   CEREAL_LD_SV(id_, txt_, lng_, curr_id_, frag_);
 };
+

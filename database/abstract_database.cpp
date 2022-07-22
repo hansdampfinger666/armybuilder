@@ -74,10 +74,9 @@ Texts::del(const u64 id, Texts& trashbin)
   auto index = vec::index(id_, id);
   if (!index || lng_ != trashbin.lng_)
     return false;
-
   trashbin.id_.emplace_back(id_[index.value()]);
   trashbin.txt_.emplace_back(txt_[index.value()]);
-  id_[index.value()] = 0;
+  vec::erase_at_index(index.value(), id_, txt_);
   frag_ = vec::calc_frag(id_);
   return true;
 }

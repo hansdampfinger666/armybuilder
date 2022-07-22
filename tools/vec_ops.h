@@ -405,9 +405,9 @@ quick_sort(vector<T>& vec,
   };
   (size_illegal(vec, vecs), ...);
 
-  if (sizes_illegal) {
+  if (sizes_illegal) 
     return false;
-  }
+
   quick_sort_impl(vec, begin_index, end_index, vecs...);
   return true;
 }
@@ -505,6 +505,16 @@ vksksv(const T1& search_value,
   vector<T3> result;
   for (const auto key_index_right : key_indexes_right)
     result.push_back(result_column_right[key_index_right]);
+}
+
+template<typename... Ts>
+void
+erase_at_index(const size_t index, vector<Ts>&... vecs)
+{
+  auto erase = [&](auto& vec) {
+	vec.erase(vec.begin() + index);
+  };
+  (erase(vecs), ...);
 }
 
 }

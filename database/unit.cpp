@@ -43,10 +43,9 @@ Units::del(const u64 id, Units& trashbin)
   auto index = vec::index(id_, id);
   if (!index)
     return false;
-
-  auto trashed_unit = get(index.value());
+  auto trashed_unit = get(id);
   trashbin.append(trashed_unit.value());
-  id_[index.value()] = 0;
+  vec::erase_at_index(index.value(), id_, txt_id_, army_id_);
   frag_ = vec::calc_frag(id_);
   return true;
 }
@@ -57,9 +56,9 @@ Units::get(const u64 id)
   auto index = vec::index(id_, id);
   if (!index)
     return {};
-
-  auto fetched_unit = get(index.value());
-  return fetched_unit.value();
+  auto fetched_unit = Unit{ { id_[index.value()], txt_id_[index.value()] },
+	  army_id_[index.value()] };
+  return fetched_unit;
 }
 
   opt<Units::UnitReadable> 
