@@ -1,6 +1,6 @@
 #include "model.h"
 
-u64
+i32
 Models::add(const string& name)
 {
   auto txt_id_db = texts_->add(name);
@@ -15,8 +15,8 @@ Models::add(const string& name)
   }
 }
 
-u64
-Models::add(const string& name, const u64 unit_id)
+i32
+Models::add(const string& name, const i32 unit_id)
 {
   auto id = add(name);
   auto index = vec::index(id_, id);
@@ -26,8 +26,8 @@ Models::add(const string& name, const u64 unit_id)
   return id;
 }
 
-u64
-Models::add(const string& name, const u64 unit_id, const u64 army_id)
+i32
+Models::add(const string& name, const i32 unit_id, const i32 army_id)
 {
   auto id = add(name, unit_id);
   auto index = vec::index(id_, id);
@@ -38,7 +38,7 @@ Models::add(const string& name, const u64 unit_id, const u64 army_id)
 }
 
 opt<Models::ModelReadable>
-Models::get_readable(const u64 id)
+Models::get_readable(const i32 id)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -51,7 +51,7 @@ Models::get_readable(const u64 id)
   return models_read;
 }
 
-u64
+i32
 Models::append(const Model& model)
 {
   curr_id_++;
@@ -64,7 +64,7 @@ Models::append(const Model& model)
 }
 
 bool
-Models::del(const u64 id, Models& trashbin)
+Models::del(const i32 id, Models& trashbin)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -77,7 +77,7 @@ Models::del(const u64 id, Models& trashbin)
 }
 
 std::optional<Models::Model>
-Models::get(const u64 id)
+Models::get(const i32 id)
 {
   auto index = vec::index(id_, id);
   if (!index)

@@ -29,7 +29,7 @@ public:
   ~AddDataset();
 
 signals:
-  void added_db_entry(const u64 id);
+  void added_db_entry(const u32 id);
 
 public slots:
   void army_drop_down_changed(const QString& txt);

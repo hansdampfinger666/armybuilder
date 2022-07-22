@@ -36,10 +36,10 @@ public:
     "ID",
     "Name",
   };
-  const u32 texts_id_field_pos_ = 0;
-  const u32 armies_id_field_pos_ = 0;
-  const u32 units_id_field_pos_ = 1;
-  const u32 models_id_field_pos_ = 2;
+  const i32 texts_id_field_pos_ = 0;
+  const i32 armies_id_field_pos_ = 0;
+  const i32 units_id_field_pos_ = 1;
+  const i32 models_id_field_pos_ = 2;
 
   Texts* texts_ = nullptr;
   Armies* armies_ = nullptr;

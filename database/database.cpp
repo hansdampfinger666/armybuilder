@@ -11,18 +11,6 @@ Db::Db()
   models_->texts_ = texts_;
 }
 
-Db::~Db()
-{
-  export_data(*texts_, text_db_path);
-  export_data(*armies_, army_db_path);
-  export_data(*units_, unit_db_path);
-  export_data(*models_, model_db_path);
-  delete texts_;
-  delete armies_;
-  delete units_;
-  delete models_;
-}
-
 void
 Db::create_test_data()
 {
@@ -75,4 +63,16 @@ Db::create_model_db(Models& models)
     string str = string("Model") + std::to_string(i);
     models.add(str, i + 1, i + 1);
   }
+}
+
+Db::~Db()
+{
+  export_data(*texts_, text_db_path);
+  export_data(*armies_, army_db_path);
+  export_data(*units_, unit_db_path);
+  export_data(*models_, model_db_path);
+  delete texts_;
+  delete armies_;
+  delete units_;
+  delete models_;
 }

@@ -1,6 +1,6 @@
 #include "army.h"
 
-u64
+i32
 Armies::add(const string& name)
 {
   auto txt_id_db = texts_->add(name);
@@ -12,7 +12,7 @@ Armies::add(const string& name)
     return append({ 0, txt_id_db });
 }
 
-u64
+i32
 Armies::append(const Army& army)
 {
   curr_id_++;
@@ -23,7 +23,7 @@ Armies::append(const Army& army)
 }
 
 bool
-Armies::del(const u64 id, Armies& trashbin)
+Armies::del(const i32 id, Armies& trashbin)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -36,7 +36,7 @@ Armies::del(const u64 id, Armies& trashbin)
 }
 
 std::optional<Armies::Army>
-Armies::get(const u64 id)
+Armies::get(const i32 id)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -45,7 +45,7 @@ Armies::get(const u64 id)
 }
 
 opt<Armies::ArmyReadable>
-Armies::get_readable(const u64 id)
+Armies::get_readable(const i32 id)
 {
   auto index = vec::index(id_, id);
   if (!index)

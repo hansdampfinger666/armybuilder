@@ -6,8 +6,8 @@
 #include <cereal/types/vector.hpp>
 #include <filesystem>
 #include <fstream>
-#include    <tools/types.h>
 #include <iostream>
+#include <tools/types.h>
 
 #define CEREAL_LD_SV(...)                                                      \
   template<class Archive>                                                      \

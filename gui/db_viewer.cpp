@@ -9,7 +9,7 @@ DatabaseViewer::DatabaseViewer(QWidget* parent, const Db* db)
   , layout_(new QGridLayout(this))
 {
   // table selection buttons
-  for (i32 i = 1; const auto& btn_txt : db_->db_txt_) {
+  for (u32 i = 1; const auto& btn_txt : db_->db_txt_) {
     auto btn = new QPushButton(QString::fromStdString(btn_txt), this);
     layout_->addWidget(btn, 0, i - 1);
     QObject::connect(btn, &QPushButton::pressed, this, [this, i] {
@@ -128,7 +128,7 @@ DatabaseViewer::add_dataset()
 }
 
 void
-DatabaseViewer::fetch_new_db_entry(const u64 id)
+DatabaseViewer::fetch_new_db_entry(const u32 id)
 {
   switch (active_view_) {
     case NONE:
@@ -179,8 +179,6 @@ DatabaseViewer::fetch_new_db_entry(const u64 id)
 void
 DatabaseViewer::delete_datasets()
 {
-  auto tab = new PrintTable(get_selected_ids_and_rows().ids_);
-
   // TODO Trashbins here are a place holder, can be used in the future for
   // redo features
   auto texts_trash = new Texts;
@@ -192,8 +190,6 @@ DatabaseViewer::delete_datasets()
     new Models(db_->models_field_names_, db_->models_id_field_pos_);
 
   auto [ids, rows] = get_selected_ids_and_rows();
-
-  // TODO look here, deleting needs work to be stable
 
   for (size_t i = 0; auto selected_id : ids) {
     switch (active_view_) {
@@ -226,7 +222,7 @@ DatabaseViewer::delete_datasets()
 DatabaseViewer::ids_and_rows
 DatabaseViewer::get_selected_ids_and_rows()
 {
-  i32 id_field_position = -1;
+  u32 id_field_position = -1;
   switch (active_view_) {
     case NONE:
       break;
@@ -260,6 +256,8 @@ DatabaseViewer::extract_ids_from_selection(const QTableView* table_view,
        table_view_->selectionModel()->selectedRows(id_field_position)) {
     result.ids_.push_back(row.data().toInt());
     result.rows_.push_back(row.row());
+	auto model_index = row.parent();
+//	result.q_model_index_.push_back(&model_index);
   }
   return result;
 }

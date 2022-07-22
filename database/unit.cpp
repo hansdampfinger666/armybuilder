@@ -1,6 +1,6 @@
 #include "unit.h"
 
-u64
+i32
 Units::add(const string& name)
 {
   auto txt_id_db = texts_->add(name);
@@ -15,8 +15,8 @@ Units::add(const string& name)
   }
 }
 
-u64
-Units::add(const string& name, const u64 army_id)
+i32
+Units::add(const string& name, const i32 army_id)
 {
   auto id = add(name);
   auto index = vec::index(id_, id);
@@ -26,7 +26,7 @@ Units::add(const string& name, const u64 army_id)
   return id;
 }
 
-u64
+i32
 Units::append(const Unit& unit)
 {
   curr_id_++;
@@ -38,7 +38,7 @@ Units::append(const Unit& unit)
 }
 
 bool
-Units::del(const u64 id, Units& trashbin)
+Units::del(const i32 id, Units& trashbin)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -51,7 +51,7 @@ Units::del(const u64 id, Units& trashbin)
 }
 
 std::optional<Units::Unit>
-Units::get(const u64 id)
+Units::get(const i32 id)
 {
   auto index = vec::index(id_, id);
   if (!index)
@@ -62,7 +62,7 @@ Units::get(const u64 id)
 }
 
   opt<Units::UnitReadable> 
-  Units::get_readable(const u64 id)
+  Units::get_readable(const i32 id)
 {
 	auto index = vec::index(id_, id);	
 	if(!index)
@@ -74,8 +74,8 @@ Units::get(const u64 id)
 	return unit_read;
 }
   
-vector<u64>
-Units::get_ids_by_army(const u64 army_id)
+vector<i32>
+Units::get_ids_by_army(const i32 army_id)
 {
   return vec::get_values(id_, vec::indexes(army_id_, army_id));
 }

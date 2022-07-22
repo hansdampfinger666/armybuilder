@@ -15,8 +15,8 @@ public:
 
   struct Model : public AbstractDatabase::AbstractEntry
   {
-    u64 army_id_ = 0;
-    u64 unit_id_ = 0;
+    i32 army_id_ = 0;
+    i32 unit_id_ = 0;
   };
 
   struct ModelReadable : public AbstractDatabase::AbstractEntryReadable
@@ -25,18 +25,18 @@ public:
     string unit_txt_ = { "" };
   };
 
-  vector<u64> army_id_;
-  vector<u64> unit_id_;
+  vector<i32> army_id_;
+  vector<i32> unit_id_;
 
-  Models(const vector<string>& field_names, u32 id_field_position)
+  Models(const vector<string>& field_names, i32 id_field_position)
     : AbstractDatabase::AbstractDatabase(field_names, id_field_position){};
-  u64 add(const string& name);
-  u64 add(const string& name, const u64 unit_id);
-  u64 add(const string& name, const u64 unit_id, const u64 army_id);
-  opt<ModelReadable> get_readable(const u64 id);
-  u64 append(const Model& model);
-  bool del(const u64 id, Models& trashbin);
-  opt<Model> get(const u64 id);
+  i32 add(const string& name);
+  i32 add(const string& name, const i32 unit_id);
+  i32 add(const string& name, const i32 unit_id, const i32 army_id);
+  opt<ModelReadable> get_readable(const i32 id);
+  i32 append(const Model& model);
+  bool del(const i32 id, Models& trashbin);
+  opt<Model> get(const i32 id);
 
   CEREAL_LD_SV(army_id_, unit_id_, id_, txt_id_, curr_id_, frag_);
 };

@@ -12,10 +12,10 @@
 
 struct PrintTable
 {
-  vector<u64> column_widths_ = {};
-  i32 table_width_ = 0;
+  vector<u32> column_widths_ = {};
+  u32 table_width_ = 0;
   const string field_name_header_ = "Field name";
-  i32 field_name_width_ = field_name_header_.length();
+  u32 field_name_width_ = field_name_header_.length();
   vector<string> field_names_ = {};
   i64 current_row_ = -1;
 
@@ -101,7 +101,7 @@ struct PrintTable
     }
   }
 
-  i32 calculate_table_width()
+  u32 calculate_table_width()
   {
     return 1 + field_name_width_ + 1 + column_widths_.size() +
            std::accumulate(column_widths_.begin(), column_widths_.end(), 0);
@@ -109,7 +109,7 @@ struct PrintTable
 
   void print_hor_line()
   {
-    for (i32 i = 1; i <= table_width_; i++) {
+    for (u32 i = 1; i <= table_width_; i++) {
       std::cout << "-";
     }
     nl();
@@ -124,7 +124,7 @@ struct PrintTable
   void print_line(const string& str)
   {
     std::cout << "|" << str;
-    for (i32 i = 0; i < table_width_ - str.length() - 2; i++) {
+    for (u32 i = 0; i < table_width_ - str.length() - 2; i++) {
       std::cout << " ";
     }
     std::cout << "|";
@@ -135,7 +135,7 @@ struct PrintTable
   {
     if (current_row_ == -1) {
       std::cout << "|";
-      for (u64 padding = 1;
+      for (u32 padding = 1;
            (padding <= field_name_width_ - field_name_header_.length());
            padding++) {
         std::cout << " ";
@@ -145,8 +145,8 @@ struct PrintTable
     }
     std::cout << "|";
 
-    for (u64 i = 0; const auto width : column_widths_) {
-      for (u64 padding = 1; padding <= (width - 2 - conv::stringify(i).length());
+    for (u32 i = 0; const auto width : column_widths_) {
+      for (u32 padding = 1; padding <= (width - 2 - conv::stringify(i).length());
            padding++) {
         std::cout << " ";
       }
@@ -161,7 +161,7 @@ struct PrintTable
   {
     std::cout << "|";
 
-    for (u64 padding = 1;
+    for (u32 padding = 1;
          padding <= (field_name_width_ - field_names_[current_row_].length());
          padding++) {
       std::cout << " ";
@@ -170,8 +170,8 @@ struct PrintTable
     current_row_++;
     std::cout << "|";
 
-    for (u64 i = 0; const auto& val : vec) {
-      for (u64 padding = 1;
+    for (u32 i = 0; const auto& val : vec) {
+      for (u32 padding = 1;
            padding <= (column_widths_[i] - conv::stringify(val).length());
            padding++) {
         std::cout << " ";

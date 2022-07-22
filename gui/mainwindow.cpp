@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "performance/performance.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
@@ -10,8 +11,7 @@ MainWindow::MainWindow(QWidget* parent)
   auto c1 = new performance::Clock(perf_test_data);
   db_->create_test_data();
   delete c1;
-	performance::benchmark->print();
-	assert(performance::benchmark->ns_times_.size() == 1);
+  performance::benchmark->print();
 
   // gui setup
   ui->setupUi(this);
@@ -36,5 +36,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
+  export_data(*performance::benchmark, performance::benchmark_filepath);
   delete ui;
 }

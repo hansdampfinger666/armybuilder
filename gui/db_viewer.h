@@ -23,15 +23,16 @@ public:
 
   struct ids_and_rows
   {
-    vector<u64> ids_;
-    vector<i32> rows_;
+    vector<u32> ids_;
+    vector<u32> rows_;
+//	vector<QModelIndex*> q_model_index_;
   };
 
   DatabaseViewer(QWidget* parent, const Db* db);
   ~DatabaseViewer();
 
 public slots:
-  void fetch_new_db_entry(const u64 id);
+  void fetch_new_db_entry(const u32 id);
 
 private:
   QWidget* parent_ = nullptr;
@@ -41,7 +42,7 @@ private:
   QGridLayout* layout_ = nullptr;
 
   DBTypes active_view_{ 0 };
-  vector<i32> selected_ids_;
+  vector<u32> selected_ids_;
 
   void switch_tables(const DBTypes db_type);
   void set_window_title(const DBTypes new_view);

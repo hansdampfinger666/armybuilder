@@ -12,51 +12,51 @@ class AbstractDatabase
 public:
   struct AbstractEntry
   {
-    u64 id_ = 0;
-    u64 txt_id_ = 0;
+    i32 id_ = 0;
+    i32 txt_id_ = 0;
   };
 
   struct AbstractEntryReadable
   {
-    u64 id_ = 0;
+    i32 id_ = 0;
     string txt_ = "";
   };
 
   vector<string> field_names_;
-  u32 id_field_position_;
+  i32 id_field_position_;
 
-  vector<u64> id_;
-  vector<u64> txt_id_;
+  vector<i32> id_;
+  vector<i32> txt_id_;
   Texts* texts_ = nullptr;
 
-  u64 curr_id_ = 0;
+  i32 curr_id_ = 0;
   f32 frag_ = 0.f;
 
-  AbstractDatabase(const vector<string>& field_names, u32 id_field_position)
+  AbstractDatabase(const vector<string>& field_names, i32 id_field_position)
     : field_names_(field_names)
     , id_field_position_(id_field_position){};
-  u64 add(const string& name);
-  opt<string> get_name(const u64 id);
+  i32 add(const string& name);
+  opt<string> get_name(const i32 id);
   vector<string> get_names();
-  vector<string> get_names(const vector<u64>& ids);
-  vector<string> get_names_by_idx(const vector<size_t>& indexes);
-  opt<u64> get_id(const string& name);
-  vector<u64> get_ids(const vector<size_t>& indexes);
+  vector<string> get_names(const vector<i32>& ids);
+  vector<string> get_names_by_idx(const vector<i32>& indexes);
+  opt<i32> get_id(const string& name);
+  vector<i32> get_ids(const vector<i32>& indexes);
 };
 
 class Texts
 {
 public:
   const vector<string> field_names_ = { "ID", "Text" };
-  static const u32 texts_id_field_position_ = 0;
+  static const i32 texts_id_field_position_ = 0;
 
-  enum Lng : u32
+  enum Lng : i32
   {
     EN = 0,
     DE = 1
   };
 
-  enum TextsViewFilter : u32
+  enum TextsViewFilter : i32
   {
     NONE = 0,
     NOT_INITIAL = 1
@@ -64,28 +64,28 @@ public:
 
   struct Text
   {
-    u64 id_ = 0;
+    i32 id_ = 0;
     string txt_ = {};
     Lng lng_ = EN;
   };
 
-  vector<u64> id_;
+  vector<i32> id_;
   vector<string> txt_;
 
   Lng lng_ = EN;
-  u64 curr_id_ = 0;
+  i32 curr_id_ = 0;
   f32 frag_ = 0.f;
 
-  u64 add(const string& txt);
-  u64 add(const u64 id, const string& txt);
-  bool del(const u64 id, Texts& trashbin);
-  opt<Text> get(const u64 id);
-  opt<string> get_name(const u64 id);
-  opt<u64> get_id(const string& txt);
-  vector<u64> get_ids(const vector<size_t>& indexes);
-  vector<string> get_names(const vector<u64>& ids);
-  vector<string> get_names_by_index(const vector<size_t>& indexes);
-  vector<size_t> get_indexes(const TextsViewFilter filter);
+  i32 add(const string& txt);
+  i32 add(const i32 id, const string& txt);
+  bool del(const i32 id, Texts& trashbin);
+  opt<Text> get(const i32 id);
+  opt<string> get_name(const i32 id);
+  opt<i32> get_id(const string& txt);
+  vector<i32> get_ids(const vector<i32>& indexes);
+  vector<string> get_names(const vector<i32>& ids);
+  vector<string> get_names_by_index(const vector<i32>& indexes);
+  vector<i32> get_indexes(const TextsViewFilter filter);
 
   CEREAL_LD_SV(id_, txt_, lng_, curr_id_, frag_);
 };

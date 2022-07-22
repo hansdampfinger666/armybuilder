@@ -139,7 +139,7 @@ AddDataset::army_drop_down_changed(const QString& txt)
 void
 AddDataset::commit_changes()
 {
-  u64 added_id = 0;
+  i32 added_id = 0;
 
   switch (active_view_) {
     case NONE:
